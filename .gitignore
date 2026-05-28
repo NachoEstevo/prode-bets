@@ -6,5 +6,7 @@ build/
 .env.*
 !.env.example
 .superpowers/
+.worktrees
+.worktrees/
 coverage/
 npm-debug.log*

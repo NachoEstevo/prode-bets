@@ -19,6 +19,7 @@
       "css": [
         "src/content/matchday-overlay.css",
         "src/content/matchday-player.css",
+        "src/content/matchday-refined.css",
         "src/content/twitter-match-injector.css"
       ],
       "run_at": "document_idle"
@@ -26,7 +27,12 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": ["src/shared/sample-match.json"],
+      "resources": [
+        "src/shared/sample-match.json",
+        "src/assets/flags/argentina.svg",
+        "src/assets/flags/brazil.svg",
+        "src/assets/mascot/picanthe-kickups.svg"
+      ],
       "matches": ["http://*/*", "https://*/*"]
     }
   ]

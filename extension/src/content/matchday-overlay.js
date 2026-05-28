@@ -3,25 +3,31 @@ const DEFAULT_STATE = { overlayEnabled: true, tradingMode: "demo" };
 
 const fallbackData = {
   match: {
-    title: "Who wins the opening match?",
+    title: "Argentina vs Brazil",
     marketClosesIn: "09:42",
-    home: { name: "South", colorStrip: ["#8bdcff", "#f8f4ed", "#8bdcff"] },
-    away: { name: "North", colorStrip: ["#e86459", "#f8f4ed", "#2f3f97"] }
+    home: { id: "argentina", name: "Argentina", flagAsset: "src/assets/flags/argentina.svg" },
+    away: { id: "brazil", name: "Brazil", flagAsset: "src/assets/flags/brazil.svg" }
   },
   market: {
     externalUrl: "https://polymarket.com",
     outcomes: [
-      { id: "south-win", shortLabel: "South", probability: 58, volume: "$1.4M", liquidity: "$328K", movement: "+7", accent: "#2f6bff" },
-      { id: "north-win", shortLabel: "North", probability: 42, volume: "$980K", liquidity: "$214K", movement: "-7", accent: "#e31791" }
+      { id: "argentina-win", teamId: "argentina", shortLabel: "Argentina", probability: 58, volume: "$1.4M", liquidity: "$328K", movement: "+7", accent: "#2774d9" },
+      { id: "brazil-win", teamId: "brazil", shortLabel: "Brazil", probability: 42, volume: "$980K", liquidity: "$214K", movement: "-7", accent: "#0f8f49" }
     ]
   },
   group: {
+    name: "Founders Room",
     summary: "Your group is split before kickoff.",
     friends: [
-      { name: "Sofi", initials: "SO", outcomeId: "south-win", prediction: "South 2-1", points: 12 },
-      { name: "Tomi", initials: "TO", outcomeId: "north-win", prediction: "North win", points: 9 },
-      { name: "Juli", initials: "JU", outcomeId: "south-win", prediction: "Bought South", points: 8 }
+      { name: "Sofi", initials: "SO", outcomeId: "argentina-win", prediction: "Argentina 2-1", points: 12 },
+      { name: "Tomi", initials: "TO", outcomeId: "brazil-win", prediction: "Brazil win", points: 9 },
+      { name: "Juli", initials: "JU", outcomeId: "argentina-win", prediction: "Bought Argentina", points: 8 }
     ]
+  },
+  mascot: {
+    name: "Picanthe",
+    asset: "src/assets/mascot/picanthe-kickups.svg",
+    caption: "Picanthe keeps the ball alive until kickoff."
   }
 };
 
@@ -34,10 +40,17 @@ const escapeHtml = (value) =>
     "'": "&#39;"
   })[char]);
 
+const getAssetUrl = (path) => {
+  try {
+    return chrome.runtime.getURL(path);
+  } catch (_error) {
+    return path;
+  }
+};
+
 const loadMatchData = async () => {
   try {
-    const url = chrome.runtime.getURL("src/shared/sample-match.json");
-    const response = await fetch(url);
+    const response = await fetch(getAssetUrl("src/shared/sample-match.json"));
 
     if (!response.ok) {
       throw new Error(`Failed to load sample match: ${response.status}`);
@@ -72,22 +85,20 @@ const persistOverlayEnabled = (overlayEnabled) => {
   }
 };
 
-const colorStrip = (colors) => {
-  const [first, second, third] = colors;
-  return `linear-gradient(90deg, ${first} 0 33%, ${second} 33% 66%, ${third} 66%)`;
-};
+const renderFlag = (team) => `
+  <img class="mm-flag" src="${escapeHtml(getAssetUrl(team.flagAsset))}" alt="${escapeHtml(team.name)} flag">
+`;
 
 const renderOutcome = (outcome, team) => `
   <article class="mm-outcome" style="--mm-accent:${escapeHtml(outcome.accent)};--mm-height:${outcome.probability}%;">
     <div class="mm-outcome-head">
-      <strong>${escapeHtml(outcome.shortLabel)}</strong>
-      <span class="mm-strip" style="background:${colorStrip(team.colorStrip)}"></span>
+      <span>${renderFlag(team)}<strong>${escapeHtml(outcome.shortLabel)}</strong></span>
+      <em>${escapeHtml(outcome.movement)}</em>
     </div>
     <div class="mm-price">${escapeHtml(outcome.probability)}%</div>
     <div class="mm-metrics">
       <span>Vol ${escapeHtml(outcome.volume)}</span>
       <span>Liq ${escapeHtml(outcome.liquidity)}</span>
-      <span>Move ${escapeHtml(outcome.movement)}</span>
     </div>
     <button class="mm-buy" type="button" data-action="open-market">Buy Yes</button>
   </article>
@@ -109,45 +120,69 @@ const renderFriend = (friend, outcomesById) => {
   `;
 };
 
+const setActiveTab = (root, tabName) => {
+  root.querySelectorAll("[data-tab]").forEach((button) => {
+    const active = button.dataset.tab === tabName;
+    button.classList.toggle("mm-tab-active", active);
+    button.setAttribute("aria-selected", String(active));
+  });
+
+  root.querySelectorAll("[data-panel]").forEach((panel) => {
+    const active = panel.dataset.panel === tabName;
+    panel.classList.toggle("mm-tab-panel-active", active);
+    panel.hidden = !active;
+  });
+};
+
 const renderOverlay = (data) => {
   const root = document.createElement("section");
   const outcomesById = new Map(data.market.outcomes.map((outcome) => [outcome.id, outcome]));
-  const [homeOutcome, awayOutcome] = data.market.outcomes;
+  const teamsById = new Map([[data.match.home.id, data.match.home], [data.match.away.id, data.match.away]]);
 
   root.id = ROOT_ID;
-  root.className = "mm-shell";
+  root.className = "mm-shell mm-active-tab-market";
   root.innerHTML = `
-    <div class="mm-drop" role="dialog" aria-label="Matchday market drop">
+    <div class="mm-drop mm-is-compact" role="dialog" aria-label="Matchday market drop">
       <div class="mm-topline">
-        <span>Submissions close in ${escapeHtml(data.match.marketClosesIn)}</span>
+        <span>Closes in ${escapeHtml(data.match.marketClosesIn)}</span>
         <button class="mm-close" type="button" aria-label="Close Matchday Markets" data-action="close">Close</button>
       </div>
-      <h2>${escapeHtml(data.match.title)}</h2>
-      <div class="mm-market-grid">
-        ${renderOutcome(homeOutcome, data.match.home)}
-        ${renderOutcome(awayOutcome, data.match.away)}
+      <div class="mm-matchline">
+        ${renderFlag(data.match.home)}
+        <h2>${escapeHtml(data.match.title)}</h2>
+        ${renderFlag(data.match.away)}
       </div>
-      <p class="mm-note">Demo mode: trading opens Polymarket externally. No order is placed by this extension.</p>
+      <div class="mm-tabs" role="tablist" aria-label="Matchday views">
+        <button class="mm-tab mm-tab-active" type="button" role="tab" aria-selected="true" data-tab="market">Market</button>
+        <button class="mm-tab" type="button" role="tab" aria-selected="false" data-tab="friends">Friends</button>
+        <button class="mm-tab" type="button" role="tab" aria-selected="false" data-tab="motion">Mascot</button>
+      </div>
+      <section class="mm-tab-panel mm-tab-panel-active" data-panel="market" role="tabpanel">
+        <div class="mm-market-grid">
+          ${data.market.outcomes.map((outcome) => renderOutcome(outcome, teamsById.get(outcome.teamId))).join("")}
+        </div>
+        <p class="mm-note">Demo mode: opens Polymarket externally. No order is placed here.</p>
+      </section>
+      <section class="mm-tab-panel" data-panel="friends" role="tabpanel" hidden>
+        <div class="mm-panel-head">
+          <strong>${escapeHtml(data.group.name)}</strong>
+          <button class="mm-minimize" type="button" data-action="minimize">Minimize</button>
+        </div>
+        <p>${escapeHtml(data.group.summary)}</p>
+        <ul class="mm-friend-list">${data.group.friends.map((friend) => renderFriend(friend, outcomesById)).join("")}</ul>
+      </section>
+      <section class="mm-tab-panel" data-panel="motion" role="tabpanel" hidden>
+        <div class="mm-mascot-card">
+          <img class="mm-mascot-img" src="${escapeHtml(getAssetUrl(data.mascot.asset))}" alt="${escapeHtml(data.mascot.name)} doing kickups">
+          <span class="mm-ball" aria-hidden="true"></span>
+          <p>${escapeHtml(data.mascot.caption)}</p>
+        </div>
+      </section>
     </div>
 
-    <aside class="mm-friends" aria-label="Friends predictions">
-      <div class="mm-panel-head">
-        <strong>${escapeHtml(data.group.name)}</strong>
-        <button class="mm-minimize" type="button" data-action="minimize">Minimize</button>
-      </div>
-      <p>${escapeHtml(data.group.summary)}</p>
-      <ul>${data.group.friends.map((friend) => renderFriend(friend, outcomesById)).join("")}</ul>
-    </aside>
-
-    <div class="mm-runner" aria-hidden="true">
-      <span class="mm-head"></span>
-      <span class="mm-body"></span>
-      <span class="mm-arm-a"></span>
-      <span class="mm-arm-b"></span>
-      <span class="mm-leg-a"></span>
-      <span class="mm-leg-b"></span>
-      <span class="mm-boot-a"></span>
-      <span class="mm-boot-b"></span>
+    <div class="mm-mascot" aria-hidden="true">
+      <img class="mm-mascot-img" src="${escapeHtml(getAssetUrl(data.mascot.asset))}" alt="">
+      <span class="mm-ball"></span>
     </div>
     <div class="mm-field" aria-hidden="true"></div>
   `;
@@ -158,6 +193,9 @@ const renderOverlay = (data) => {
   });
   root.querySelector('[data-action="minimize"]').addEventListener("click", () => {
     root.classList.toggle("mm-is-minimized");
+  });
+  root.querySelectorAll("[data-tab]").forEach((button) => {
+    button.addEventListener("click", () => setActiveTab(root, button.dataset.tab));
   });
   root.querySelectorAll('[data-action="open-market"]').forEach((button) => {
     button.addEventListener("click", () => {

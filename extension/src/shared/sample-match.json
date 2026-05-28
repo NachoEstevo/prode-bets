@@ -1,19 +1,21 @@
 {
   "match": {
-    "id": "opening-match-demo",
-    "title": "Who wins the opening match?",
+    "id": "argentina-brazil-demo",
+    "title": "Argentina vs Brazil",
     "competition": "World football summer",
     "kickoffLabel": "10 minutes before kickoff",
     "marketClosesIn": "09:42",
     "home": {
-      "id": "south",
-      "name": "South",
-      "colorStrip": ["#8bdcff", "#f8f4ed", "#8bdcff"]
+      "id": "argentina",
+      "name": "Argentina",
+      "flagAsset": "src/assets/flags/argentina.svg",
+      "colorStrip": ["#74acdf", "#ffffff", "#74acdf"]
     },
     "away": {
-      "id": "north",
-      "name": "North",
-      "colorStrip": ["#e86459", "#f8f4ed", "#2f3f97"]
+      "id": "brazil",
+      "name": "Brazil",
+      "flagAsset": "src/assets/flags/brazil.svg",
+      "colorStrip": ["#009b3a", "#ffdf00", "#002776"]
     }
   },
   "market": {
@@ -22,26 +24,26 @@
     "externalUrl": "https://polymarket.com",
     "outcomes": [
       {
-        "id": "south-win",
-        "teamId": "south",
-        "label": "South wins",
-        "shortLabel": "South",
+        "id": "argentina-win",
+        "teamId": "argentina",
+        "label": "Argentina wins",
+        "shortLabel": "Argentina",
         "probability": 58,
         "volume": "$1.4M",
         "liquidity": "$328K",
         "movement": "+7",
-        "accent": "#2f6bff"
+        "accent": "#2774d9"
       },
       {
-        "id": "north-win",
-        "teamId": "north",
-        "label": "North wins",
-        "shortLabel": "North",
+        "id": "brazil-win",
+        "teamId": "brazil",
+        "label": "Brazil wins",
+        "shortLabel": "Brazil",
         "probability": 42,
         "volume": "$980K",
         "liquidity": "$214K",
         "movement": "-7",
-        "accent": "#e31791"
+        "accent": "#0f8f49"
       }
     ]
   },
@@ -54,26 +56,31 @@
         "id": "sofi",
         "name": "Sofi",
         "initials": "SO",
-        "outcomeId": "south-win",
-        "prediction": "South 2-1",
+        "outcomeId": "argentina-win",
+        "prediction": "Argentina 2-1",
         "points": 12
       },
       {
         "id": "tomi",
         "name": "Tomi",
         "initials": "TO",
-        "outcomeId": "north-win",
-        "prediction": "North win",
+        "outcomeId": "brazil-win",
+        "prediction": "Brazil win",
         "points": 9
       },
       {
         "id": "juli",
         "name": "Juli",
         "initials": "JU",
-        "outcomeId": "south-win",
-        "prediction": "Bought South",
+        "outcomeId": "argentina-win",
+        "prediction": "Bought Argentina",
         "points": 8
       }
     ]
+  },
+  "mascot": {
+    "name": "Picanthe",
+    "asset": "src/assets/mascot/picanthe-kickups.svg",
+    "caption": "Picanthe keeps the ball alive until kickoff."
   }
 }

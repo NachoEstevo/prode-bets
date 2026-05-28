@@ -16,21 +16,26 @@ const loadData = async () => {
   return response.json();
 };
 
-const renderOutcome = (outcome) => `
+const renderOutcome = (outcome, team) => `
   <article class="outcome" style="--accent:${outcome.accent}">
-    <strong>${outcome.shortLabel}</strong>
+    <strong>
+      <img src="${chrome.runtime.getURL(team.flagAsset)}" alt="${team.name} flag">
+      ${outcome.shortLabel}
+    </strong>
     <b>${outcome.probability}%</b>
     <span>${outcome.volume} vol</span>
   </article>
 `;
 
 const render = (data) => {
+  const teamsById = new Map([[data.match.home.id, data.match.home], [data.match.away.id, data.match.away]]);
+
   marketLink.href = data.market.externalUrl;
   card.innerHTML = `
     <div class="match-title">${data.match.title}</div>
     <div class="countdown">Closes in ${data.match.marketClosesIn}</div>
     <div class="outcomes">
-      ${data.market.outcomes.map(renderOutcome).join("")}
+      ${data.market.outcomes.map((outcome) => renderOutcome(outcome, teamsById.get(outcome.teamId))).join("")}
     </div>
     <div class="group">
       ${data.group.name}: ${data.group.friends.length} friends tracking this match.

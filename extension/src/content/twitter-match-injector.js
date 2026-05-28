@@ -23,14 +23,14 @@
       name: "Argentina",
       probability: 55,
       volume: "$820K",
-      strip: ["#6bb7ff", "#f8f4ed", "#6bb7ff"],
+      flagAsset: "src/assets/flags/argentina.svg",
       accent: "#2f6bff"
     },
     away: {
       name: "Brazil",
       probability: 45,
       volume: "$690K",
-      strip: ["#28b45b", "#f2c765", "#1f6f43"],
+      flagAsset: "src/assets/flags/brazil.svg",
       accent: "#f2c765"
     }
   };
@@ -49,15 +49,18 @@
     return KEYWORDS.some((keyword) => normalized.includes(keyword));
   };
 
-  const stripStyle = (colors) => {
-    const [first, second, third] = colors;
-    return `linear-gradient(90deg, ${first} 0 33%, ${second} 33% 66%, ${third} 66%)`;
+  const getAssetUrl = (path) => {
+    try {
+      return chrome.runtime.getURL(path);
+    } catch (_error) {
+      return path;
+    }
   };
 
   const renderOutcome = (outcome) => `
     <button class="prode-tweet-outcome" type="button" data-action="open-polymarket">
       <span class="prode-tweet-country">
-        <i style="background:${stripStyle(outcome.strip)}"></i>
+        <img src="${escapeHtml(getAssetUrl(outcome.flagAsset))}" alt="${escapeHtml(outcome.name)} flag">
         ${escapeHtml(outcome.name)}
       </span>
       <strong style="color:${escapeHtml(outcome.accent)}">${escapeHtml(outcome.probability)}%</strong>

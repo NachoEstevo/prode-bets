@@ -5,6 +5,9 @@ import test from "node:test";
 const readJson = async (path) =>
   JSON.parse(await readFile(new URL(`../${path}`, import.meta.url), "utf8"));
 
+const readText = async (path) =>
+  readFile(new URL(`../${path}`, import.meta.url), "utf8");
+
 test("manifest is a Manifest V3 extension with content overlay and popup", async () => {
   const manifest = await readJson("extension/manifest.json");
 
@@ -19,6 +22,7 @@ test("manifest is a Manifest V3 extension with content overlay and popup", async
   assert.deepEqual(manifest.content_scripts[0].css, [
     "src/content/matchday-overlay.css",
     "src/content/matchday-player.css",
+    "src/content/matchday-refined.css",
     "src/content/twitter-match-injector.css"
   ]);
 });
@@ -39,6 +43,21 @@ test("friend picks reference existing outcome ids", async () => {
   for (const friend of sample.group.friends) {
     assert.ok(outcomeIds.has(friend.outcomeId), `${friend.name} references an unknown outcome`);
   }
+});
+
+test("sample match uses real country flags and a local chili mascot asset", async () => {
+  const sample = await readJson("extension/src/shared/sample-match.json");
+  const manifest = await readJson("extension/manifest.json");
+  const resources = manifest.web_accessible_resources.flatMap((entry) => entry.resources);
+
+  assert.equal(sample.match.home.name, "Argentina");
+  assert.equal(sample.match.away.name, "Brazil");
+  assert.equal(sample.match.home.flagAsset, "src/assets/flags/argentina.svg");
+  assert.equal(sample.match.away.flagAsset, "src/assets/flags/brazil.svg");
+  assert.equal(sample.mascot.asset, "src/assets/mascot/picanthe-kickups.svg");
+  assert.ok(resources.includes(sample.match.home.flagAsset));
+  assert.ok(resources.includes(sample.match.away.flagAsset));
+  assert.ok(resources.includes(sample.mascot.asset));
 });
 
 test("manifest referenced UI files exist and do not submit Polymarket orders", async () => {
@@ -80,13 +99,14 @@ test("popup exposes overlay controls and content script listens for visibility m
 });
 
 test("local preview page shims Chrome APIs and loads extension overlay assets", async () => {
-  const previewHtml = await readFile(new URL("../preview/index.html", import.meta.url), "utf8");
-  const previewShim = await readFile(new URL("../preview/preview-shim.js", import.meta.url), "utf8");
-  const previewCss = await readFile(new URL("../preview/demo.css", import.meta.url), "utf8");
+  const previewHtml = await readText("preview/index.html");
+  const previewShim = await readText("preview/preview-shim.js");
+  const previewCss = await readText("preview/demo.css");
 
   assert.match(previewHtml, /demo\.css/);
   assert.match(previewHtml, /matchday-overlay\.css/);
   assert.match(previewHtml, /matchday-player\.css/);
+  assert.match(previewHtml, /matchday-refined\.css/);
   assert.match(previewHtml, /preview-shim\.js/);
   assert.match(previewHtml, /matchday-overlay\.js/);
   assert.match(previewHtml, /twitter-match-injector\.js/);
@@ -98,15 +118,45 @@ test("local preview page shims Chrome APIs and loads extension overlay assets", 
 });
 
 test("twitter injector detects match tweets and keeps real trading external", async () => {
-  const injectorJs = await readFile(new URL("../extension/src/content/twitter-match-injector.js", import.meta.url), "utf8");
-  const injectorCss = await readFile(new URL("../extension/src/content/twitter-match-injector.css", import.meta.url), "utf8");
+  const injectorJs = await readText("extension/src/content/twitter-match-injector.js");
+  const injectorCss = await readText("extension/src/content/twitter-match-injector.css");
 
   assert.match(injectorJs, /MutationObserver/);
   assert.match(injectorJs, /data-testid="tweet"/);
   assert.match(injectorJs, /world cup|mundial/i);
   assert.match(injectorJs, /data-prode-bets-injected/);
+  assert.match(injectorJs, /flagAsset/);
   assert.match(injectorJs, /polymarket\.com/);
   assert.doesNotMatch(injectorJs, /clob\.polymarket\.com\/order|createOrder|postOrder/i);
   assert.match(injectorCss, /prode-tweet-market/);
   assert.match(injectorCss, /prode-confetti/);
+});
+
+test("overlay separates dense content into tabs and renders the mascot", async () => {
+  const overlayJs = await readText("extension/src/content/matchday-overlay.js");
+  const refinedCss = await readText("extension/src/content/matchday-refined.css");
+  const mascot = await readText("extension/src/assets/mascot/picanthe-kickups.svg");
+
+  assert.match(overlayJs, /role="tablist"/);
+  assert.match(overlayJs, /data-tab="market"/);
+  assert.match(overlayJs, /data-tab="friends"/);
+  assert.match(overlayJs, /data-tab="motion"/);
+  assert.match(overlayJs, /mm-mascot/);
+  assert.match(overlayJs, /flagAsset/);
+  assert.match(refinedCss, /mm-tab-panel/);
+  assert.match(refinedCss, /mm-is-compact/);
+  assert.match(mascot, /picanthe/i);
+  assert.match(mascot, /#c9192e/i);
+});
+
+test("real flag SVG assets are local and recognizable", async () => {
+  const argentina = await readText("extension/src/assets/flags/argentina.svg");
+  const brazil = await readText("extension/src/assets/flags/brazil.svg");
+
+  assert.match(argentina, /<svg/);
+  assert.match(argentina, /#74acdf/i);
+  assert.match(argentina, /#f6b40e/i);
+  assert.match(brazil, /<svg/);
+  assert.match(brazil, /#009b3a/i);
+  assert.match(brazil, /#ffdf00/i);
 });

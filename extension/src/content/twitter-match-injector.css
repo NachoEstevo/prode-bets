@@ -87,13 +87,14 @@
   font-weight: 900;
 }
 
-.prode-tweet-country i {
+.prode-tweet-country img {
   display: block;
   flex: 0 0 auto;
   width: 34px;
   height: 20px;
   border: 1px solid rgba(248, 244, 237, 0.28);
   border-radius: 6px;
+  object-fit: cover;
 }
 
 .prode-tweet-outcome strong {

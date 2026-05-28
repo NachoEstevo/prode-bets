@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 540" role="img" aria-label="Flag of Argentina">
+  <rect width="900" height="540" fill="#74acdf"/>
+  <rect y="180" width="900" height="180" fill="#fff"/>
+  <g transform="translate(450 270)">
+    <circle r="42" fill="#f6b40e"/>
+    <g fill="#f6b40e">
+      <path d="M0-86 9-50H-9z"/>
+      <path d="M0 86 9 50H-9z"/>
+      <path d="M86 0 50 9V-9z"/>
+      <path d="M-86 0-50 9V-9z"/>
+      <path d="m61-61-19 32-13-13z"/>
+      <path d="m-61 61 19-32 13 13z"/>
+      <path d="m61 61-32-19 13-13z"/>
+      <path d="m-61-61 32 19-13 13z"/>
+    </g>
+    <circle r="25" fill="#f6b40e" stroke="#8c5a00" stroke-width="4"/>
+  </g>
+</svg>

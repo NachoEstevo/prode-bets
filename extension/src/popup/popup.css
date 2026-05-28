@@ -109,8 +109,18 @@ header p,
 }
 
 .outcome strong {
-  display: block;
+  align-items: center;
+  display: flex;
+  gap: 7px;
   font-size: 14px;
+}
+
+.outcome strong img {
+  border: 1px solid rgba(248, 244, 237, 0.22);
+  border-radius: 5px;
+  height: 17px;
+  object-fit: cover;
+  width: 26px;
 }
 
 .outcome b {

@@ -1,8 +1,8 @@
 {
-  "name": "matchday-markets",
+  "name": "prode-bets",
   "version": "0.1.0",
   "private": true,
-  "description": "Chrome extension prototype for matchday betting drops, friends predictions, and future Polymarket integration.",
+  "description": "Chrome extension prototype for prode-style betting drops, friends predictions, and future Polymarket integration.",
   "type": "module",
   "scripts": {
     "test": "node --test"

@@ -1,6 +1,6 @@
-# Matchday Markets
+# Prode Bets
 
-Chrome extension prototype for football matchdays: a premium pre-match prediction drop, friends leaderboard context, calendar-aware product direction, and a clean lane for future Polymarket trading.
+Chrome extension prototype for football matchdays: a premium prode-style betting drop, friends leaderboard context, calendar-aware product direction, and a clean lane for future Polymarket trading.
 
 ## Current Scope
 
@@ -31,7 +31,7 @@ npm test
 2. Enable Developer Mode.
 3. Click `Load unpacked`.
 4. Select the `extension/` folder in this repository.
-5. Open any normal `http` or `https` page and wait for the Matchday overlay.
+5. Open any normal `http` or `https` page and wait for the Prode Bets overlay.
 
 ## Repo Map
 

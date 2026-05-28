@@ -1,8 +1,8 @@
-# Matchday Markets Design
+# Prode Bets Design
 
 ## Product Frame
 
-Matchday Markets is a Chrome extension for football matchdays. It protects the user's attention around important matches, drops a premium Twitch-style prediction panel before kickoff, and keeps a private friends leaderboard visible while the match unfolds.
+Prode Bets is a Chrome extension for football matchdays. It protects the user's attention around important matches, drops a premium Twitch-style prediction panel before kickoff, and keeps a private friends leaderboard visible while the match unfolds.
 
 The money hook is Polymarket. The extension should eventually surface real Polymarket markets and let eligible users trade through Polymarket's non-custodial flow. The social layer must not custody money, run friend-to-friend pools, or settle private wagers. Friends can predict, compare, react, and rank each other; real financial exposure belongs to Polymarket.
 

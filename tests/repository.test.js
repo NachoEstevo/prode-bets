@@ -52,3 +52,11 @@ test("manifest referenced UI files exist and do not submit Polymarket orders", a
     assert.doesNotMatch(content, /clob\.polymarket\.com\/order|createOrder|postOrder/i);
   }
 });
+
+test("project metadata uses the public Prode Bets name", async () => {
+  const packageJson = await readJson("package.json");
+  const manifest = await readJson("extension/manifest.json");
+
+  assert.equal(packageJson.name, "prode-bets");
+  assert.equal(manifest.name, "Prode Bets");
+});

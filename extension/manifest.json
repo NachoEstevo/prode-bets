@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Matchday Markets",
+  "name": "Prode Bets",
   "version": "0.1.0",
-  "description": "Pre-match prediction drops, friends leaderboard context, and a future lane for Polymarket trading.",
+  "description": "Prode-style pre-match betting drops, friends leaderboard context, and a future lane for Polymarket trading.",
   "permissions": ["alarms", "storage"],
   "background": {
     "service_worker": "src/background/service-worker.js",
@@ -10,7 +10,7 @@
   },
   "action": {
     "default_popup": "src/popup/popup.html",
-    "default_title": "Matchday Markets"
+    "default_title": "Prode Bets"
   },
   "content_scripts": [
     {

@@ -1,10 +1,10 @@
-# Polymarket Handoff
+# Prode Bets Polymarket Handoff
 
 This repo is ready for a separate Polymarket integration lane. Keep this work isolated from overlay rendering until the data contract is stable.
 
 ## Product Goal
 
-Before kickoff, Matchday Markets should surface the relevant Polymarket contract in a Twitch-style dropdown:
+Before kickoff, Prode Bets should surface the relevant Polymarket contract in a Twitch-style dropdown:
 
 - outcome prices or probabilities
 - volume and liquidity

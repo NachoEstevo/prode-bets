@@ -78,11 +78,15 @@ test("popup exposes overlay controls and content script listens for visibility m
 test("local preview page shims Chrome APIs and loads extension overlay assets", async () => {
   const previewHtml = await readFile(new URL("../preview/index.html", import.meta.url), "utf8");
   const previewShim = await readFile(new URL("../preview/preview-shim.js", import.meta.url), "utf8");
+  const previewCss = await readFile(new URL("../preview/demo.css", import.meta.url), "utf8");
 
+  assert.match(previewHtml, /demo\.css/);
   assert.match(previewHtml, /matchday-overlay\.css/);
   assert.match(previewHtml, /matchday-player\.css/);
   assert.match(previewHtml, /preview-shim\.js/);
   assert.match(previewHtml, /matchday-overlay\.js/);
+  assert.match(previewHtml, /ESPN-style mock/);
   assert.match(previewShim, /globalThis\.chrome/);
   assert.match(previewShim, /src\/shared\/sample-match\.json/);
+  assert.match(previewCss, /grid-auto-flow:\s*dense/);
 });

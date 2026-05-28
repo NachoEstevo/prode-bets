@@ -29,6 +29,8 @@ npm test
 
 Open `preview/index.html` in a browser to review the overlay without installing the unpacked extension. This uses a small local Chrome API shim and the same content script/CSS as the real extension.
 
+The preview references an ESPN-style mock feed. ESPN does not provide a clearly supported public soccer API for this prototype, so the repo currently includes a normalizer for scoreboard-shaped mock data in `extension/src/sports/normalize-espn-scoreboard.js`.
+
 ## Load The Extension
 
 1. Open `chrome://extensions`.
@@ -43,6 +45,7 @@ Open `preview/index.html` in a browser to review the overlay without installing 
 - `extension/src/content/`: injected page overlay and neo-pixel player styling.
 - `extension/src/popup/`: extension popup.
 - `extension/src/shared/sample-match.json`: single demo data source.
+- `extension/src/sports/`: sports scoreboard normalization seams for mocked or third-party feeds.
 - `preview/index.html`: local overlay preview for quick visual iteration.
 - `docs/polymarket-handoff.md`: integration notes for the Polymarket lane.
 - `docs/superpowers/specs/`: product/design spec.

@@ -4,45 +4,67 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Prode Bets Preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@500;700;800;900&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./demo.css">
   <link rel="stylesheet" href="../extension/src/content/matchday-overlay.css">
   <link rel="stylesheet" href="../extension/src/content/matchday-player.css">
-  <style>
-    body {
-      min-height: 140vh;
-      margin: 0;
-      background:
-        radial-gradient(circle at 20% 10%, rgba(47, 107, 255, 0.22), transparent 22rem),
-        radial-gradient(circle at 80% 18%, rgba(227, 23, 145, 0.2), transparent 24rem),
-        #07090d;
-      color: #f8f4ed;
-      font-family: ui-sans-serif, system-ui, sans-serif;
-    }
-
-    main {
-      max-width: 960px;
-      padding: 180px 32px;
-    }
-
-    h1 {
-      max-width: 760px;
-      margin: 0;
-      font-size: clamp(3rem, 8vw, 7rem);
-      line-height: 0.88;
-    }
-
-    p {
-      max-width: 560px;
-      color: rgba(248, 244, 237, 0.68);
-      font-size: 1.2rem;
-      line-height: 1.5;
-    }
-  </style>
 </head>
 <body>
   <main>
-    <h1>Preview page for fast overlay iteration.</h1>
-    <p>This page shims the Chrome extension APIs so the content overlay can be reviewed without loading the unpacked extension.</p>
+    <nav class="demo-nav" aria-label="Demo">
+      <a class="demo-brand" href="#"><span></span> Prode Bets</a>
+      <div class="demo-nav-copy">ESPN-style mock feed · Polymarket-style market · friends room</div>
+      <a class="demo-action" href="../extension/manifest.json">Extension manifest</a>
+    </nav>
+
+    <section class="demo-hero">
+      <div>
+        <p class="demo-kicker">First playable demo</p>
+        <h1>Betting tension drops into the browser before kickoff.</h1>
+        <p class="demo-lead">This local page is the showroom: mocked sports data, premium match overlay, friends leaderboard, and a neo-pixel player running across the browser edge.</p>
+      </div>
+      <aside class="demo-ticket">
+        <span>Market closes</span>
+        <strong>09:42</strong>
+        <small>Mocked countdown for demo pacing</small>
+      </aside>
+    </section>
+
+    <section class="demo-grid" aria-label="Demo context">
+      <article class="demo-stage">
+        <div class="demo-browser-bar">
+          <span></span><span></span><span></span>
+          <div>prodebets.local/matchday</div>
+        </div>
+        <div class="demo-page-copy">
+          <p class="demo-kicker">Editorial page underneath</p>
+          <h2>The extension behaves like a broadcast layer, not a landing page.</h2>
+          <p>Open this preview and judge the overlay in context: it has to feel like a moment invading Chrome, then disappear cleanly.</p>
+        </div>
+        <div class="demo-marquee" aria-hidden="true">
+          <span>pregame market</span>
+          <span>friends split</span>
+          <span>pixel run</span>
+          <span>mock feed</span>
+        </div>
+      </article>
+
+      <article class="demo-card">
+        <span class="demo-card-label">Data seam</span>
+        <h2>ESPN-style mock</h2>
+        <p>Modeled after scoreboard event data so a real sports feed can be normalized later without rewriting the visual layer.</p>
+      </article>
+
+      <article class="demo-card demo-card-hot">
+        <span class="demo-card-label">Room state</span>
+        <h2>Founders Room</h2>
+        <p>Sofi leads, Tomi fades, Juli bought the favorite. The group is social; real money stays in the market lane.</p>
+      </article>
+    </section>
   </main>
+
   <script src="./preview-shim.js"></script>
   <script src="../extension/src/content/matchday-overlay.js"></script>
 </body>

@@ -1,0 +1,10 @@
+{
+  "name": "matchday-markets",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Chrome extension prototype for matchday betting drops, friends predictions, and future Polymarket integration.",
+  "type": "module",
+  "scripts": {
+    "test": "node --test"
+  }
+}

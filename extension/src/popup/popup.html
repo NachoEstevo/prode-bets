@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Matchday Markets</title>
+  <link rel="stylesheet" href="./popup.css">
+</head>
+<body>
+  <main>
+    <header>
+      <span class="mark" aria-hidden="true"></span>
+      <div>
+        <h1>Matchday Markets</h1>
+        <p>Prediction drops and friends context for kickoff.</p>
+      </div>
+    </header>
+
+    <section id="match-card" class="card" aria-live="polite">
+      <p>Loading match...</p>
+    </section>
+
+    <section class="card">
+      <h2>Polymarket lane</h2>
+      <p class="muted">Demo mode opens markets externally. Wallet auth, eligibility, and order preview belong in the next integration pass.</p>
+      <a id="market-link" href="https://polymarket.com" target="_blank" rel="noreferrer">Open Polymarket</a>
+    </section>
+  </main>
+  <script src="./popup.js"></script>
+</body>
+</html>

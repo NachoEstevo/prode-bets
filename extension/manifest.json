@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "Matchday Markets",
+  "version": "0.1.0",
+  "description": "Pre-match prediction drops, friends leaderboard context, and a future lane for Polymarket trading.",
+  "permissions": ["alarms", "storage"],
+  "background": {
+    "service_worker": "src/background/service-worker.js",
+    "type": "module"
+  },
+  "action": {
+    "default_popup": "src/popup/popup.html",
+    "default_title": "Matchday Markets"
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["src/content/matchday-overlay.js"],
+      "css": ["src/content/matchday-overlay.css", "src/content/matchday-player.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["src/shared/sample-match.json"],
+      "matches": ["http://*/*", "https://*/*"]
+    }
+  ]
+}

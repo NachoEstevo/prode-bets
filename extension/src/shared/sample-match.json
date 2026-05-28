@@ -1,0 +1,79 @@
+{
+  "match": {
+    "id": "opening-match-demo",
+    "title": "Who wins the opening match?",
+    "competition": "World football summer",
+    "kickoffLabel": "10 minutes before kickoff",
+    "marketClosesIn": "09:42",
+    "home": {
+      "id": "south",
+      "name": "South",
+      "colorStrip": ["#8bdcff", "#f8f4ed", "#8bdcff"]
+    },
+    "away": {
+      "id": "north",
+      "name": "North",
+      "colorStrip": ["#e86459", "#f8f4ed", "#2f3f97"]
+    }
+  },
+  "market": {
+    "provider": "polymarket",
+    "mode": "demo",
+    "externalUrl": "https://polymarket.com",
+    "outcomes": [
+      {
+        "id": "south-win",
+        "teamId": "south",
+        "label": "South wins",
+        "shortLabel": "South",
+        "probability": 58,
+        "volume": "$1.4M",
+        "liquidity": "$328K",
+        "movement": "+7",
+        "accent": "#2f6bff"
+      },
+      {
+        "id": "north-win",
+        "teamId": "north",
+        "label": "North wins",
+        "shortLabel": "North",
+        "probability": 42,
+        "volume": "$980K",
+        "liquidity": "$214K",
+        "movement": "-7",
+        "accent": "#e31791"
+      }
+    ]
+  },
+  "group": {
+    "id": "founders-room",
+    "name": "Founders Room",
+    "summary": "Your group is split before kickoff.",
+    "friends": [
+      {
+        "id": "sofi",
+        "name": "Sofi",
+        "initials": "SO",
+        "outcomeId": "south-win",
+        "prediction": "South 2-1",
+        "points": 12
+      },
+      {
+        "id": "tomi",
+        "name": "Tomi",
+        "initials": "TO",
+        "outcomeId": "north-win",
+        "prediction": "North win",
+        "points": 9
+      },
+      {
+        "id": "juli",
+        "name": "Juli",
+        "initials": "JU",
+        "outcomeId": "south-win",
+        "prediction": "Bought South",
+        "points": 8
+      }
+    ]
+  }
+}

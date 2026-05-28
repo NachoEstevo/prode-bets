@@ -1,5 +1,6 @@
 import { DEFAULT_STATE, reduceStatePatch } from "../shared/matchday-state.js";
 import { isGoogleCalendarConfigured, syncSelectedCountryMatches } from "../calendar/google-calendar-client.js";
+import { fetchRealDemoData } from "../real-demo/ireland-qatar-demo.js";
 
 chrome.runtime.onInstalled.addListener(async () => {
   const current = await chrome.storage.local.get(DEFAULT_STATE);
@@ -7,6 +8,14 @@ chrome.runtime.onInstalled.addListener(async () => {
 });
 
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+  if (message?.type === "matchday:getRealDemoData") {
+    fetchRealDemoData().then((data) => {
+      sendResponse({ ok: true, data });
+    });
+
+    return true;
+  }
+
   if (message?.type === "matchday:getState") {
     chrome.storage.local.get(DEFAULT_STATE).then((state) => {
       sendResponse({ ok: true, state: reduceStatePatch(DEFAULT_STATE, state) });

@@ -14,3 +14,4 @@ npm-debug.log*
 extension/src/assets/chili/picanthe-*.png
 !extension/src/assets/chili/picanthe-idle-kickups-sheet.png
 output/
+.brave-prode-bets-demo-profile/

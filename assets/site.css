@@ -1,0 +1,281 @@
+:root {
+  --bg: #10100f;
+  --panel: #191816;
+  --panel-2: #22201c;
+  --ink: #fff8ee;
+  --muted: #b8ad9c;
+  --line: rgba(255, 248, 238, 0.14);
+  --red: #c9192e;
+  --gold: #d7c7a0;
+  --green: #0f8f49;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  background:
+    linear-gradient(90deg, rgba(255, 248, 238, 0.035) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(255, 248, 238, 0.03) 1px, transparent 1px),
+    var(--bg);
+  background-size: 44px 44px;
+  color: var(--ink);
+  font-family: "Outfit", "Avenir Next", ui-sans-serif, system-ui, sans-serif;
+}
+
+a {
+  color: inherit;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+.home-shell,
+.room-shell {
+  width: min(1080px, calc(100vw - 32px));
+  margin: 0 auto;
+  padding: 28px 0;
+}
+
+.home-shell {
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+}
+
+.home-panel,
+.match-strip,
+.pick-panel,
+.leaderboard-panel,
+.install-panel {
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: rgba(25, 24, 22, 0.94);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.34);
+}
+
+.home-panel {
+  max-width: 620px;
+  padding: 36px;
+}
+
+.home-panel h1,
+.match-strip h1,
+.pick-panel h2,
+.leaderboard-panel h2,
+.install-panel h2 {
+  margin: 0;
+  letter-spacing: 0;
+  line-height: 0.95;
+}
+
+.home-panel h1,
+.match-strip h1 {
+  font-size: clamp(42px, 8vw, 96px);
+}
+
+.home-panel p,
+.match-strip p,
+.pick-panel p,
+.install-panel p,
+.leaderboard-panel p {
+  color: var(--muted);
+}
+
+.eyebrow {
+  margin: 0 0 10px;
+  color: var(--gold);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.primary-link,
+.secondary-link,
+.pick-form button {
+  display: inline-grid;
+  min-height: 42px;
+  place-items: center;
+  border: 0;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 900;
+  padding: 0 16px;
+  text-decoration: none;
+}
+
+.primary-link,
+.pick-form button {
+  background: var(--ink);
+  color: #11100f;
+}
+
+.secondary-link {
+  border: 1px solid var(--line);
+  color: var(--ink);
+}
+
+.match-strip {
+  display: grid;
+  grid-template-columns: 76px minmax(0, 1fr) 76px;
+  gap: 18px;
+  align-items: center;
+  padding: 22px;
+}
+
+.match-strip img {
+  width: 76px;
+  height: 54px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.room-grid {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.9fr) minmax(320px, 1.1fr);
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.pick-panel,
+.leaderboard-panel,
+.install-panel {
+  padding: 20px;
+}
+
+.panel-head {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.panel-head span {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--gold);
+  font-size: 12px;
+  font-weight: 900;
+  padding: 7px 10px;
+}
+
+.pick-form {
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.pick-form label {
+  display: grid;
+  gap: 7px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.pick-form input,
+.pick-form select {
+  width: 100%;
+  min-height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(255, 248, 238, 0.07);
+  color: var(--ink);
+  padding: 0 12px;
+}
+
+.fine-print {
+  margin-bottom: 0;
+  font-size: 12px;
+}
+
+.leaderboard {
+  display: grid;
+  gap: 8px;
+  margin: 18px 0 0;
+  padding: 0;
+}
+
+.leaderboard li {
+  display: grid;
+  grid-template-columns: 28px 38px minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: rgba(255, 248, 238, 0.055);
+  list-style: none;
+  padding: 10px;
+}
+
+.leaderboard span,
+.leaderboard strong {
+  display: grid;
+  height: 34px;
+  place-items: center;
+  border-radius: 10px;
+  background: rgba(255, 248, 238, 0.08);
+}
+
+.leaderboard b,
+.leaderboard em {
+  display: block;
+  font-style: normal;
+}
+
+.leaderboard small {
+  color: var(--muted);
+}
+
+.install-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: start;
+  margin-top: 14px;
+}
+
+.install-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.install-steps {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: var(--muted);
+}
+
+code {
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: rgba(255, 248, 238, 0.06);
+  color: var(--ink);
+  padding: 1px 5px;
+}
+
+@media (max-width: 760px) {
+  .match-strip,
+  .room-grid,
+  .install-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .match-strip img:last-child {
+    display: none;
+  }
+
+  .install-actions {
+    justify-content: flex-start;
+  }
+}

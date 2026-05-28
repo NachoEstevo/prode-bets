@@ -25,7 +25,7 @@ const sampleRoom = {
 test("builds a shareable room invite link with match context", () => {
   const link = buildInviteLink(sampleRoom, "argentina-brazil-demo");
 
-  assert.equal(link, "https://prodebets.app/rooms/PB-2026?match=argentina-brazil-demo");
+  assert.equal(link, "https://prode-bets.vercel.app/rooms/PB-2026?match=argentina-brazil-demo");
 });
 
 test("adds a real invited friend and recalculates leaderboard order", () => {

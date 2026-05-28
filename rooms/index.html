@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Prode Bets Room</title>
+  <meta name="description" content="Join a Prode Bets match room and install the Chrome extension.">
+  <link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+  <main class="room-shell" data-room-app>
+    <section class="match-strip" aria-label="Match">
+      <img src="/extension/src/assets/flags/argentina.svg" alt="Argentina flag">
+      <div>
+        <p class="eyebrow">Live Room</p>
+        <h1 data-room-title>Argentina vs Brazil</h1>
+        <p data-room-subtitle>PB-2026 leaderboard</p>
+      </div>
+      <img src="/extension/src/assets/flags/brazil.svg" alt="Brazil flag">
+    </section>
+
+    <section class="room-grid">
+      <div class="pick-panel">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Make Your Pick</p>
+            <h2>Join without the extension</h2>
+          </div>
+          <span data-sync-status>Loading</span>
+        </div>
+
+        <form class="pick-form" data-pick-form>
+          <label>
+            Name
+            <input name="friendName" autocomplete="name" maxlength="24" placeholder="Your name" required>
+          </label>
+          <label>
+            Pick
+            <select name="outcomeId" aria-label="Pick outcome">
+              <option value="argentina-win">Argentina</option>
+              <option value="draw">Draw</option>
+              <option value="brazil-win">Brazil</option>
+            </select>
+          </label>
+          <button type="submit">Add pick</button>
+        </form>
+        <p class="fine-print">Social picks only. Real-money betting is not handled here.</p>
+      </div>
+
+      <div class="leaderboard-panel">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">Leaderboard</p>
+            <h2 data-room-name>Founders Room</h2>
+          </div>
+          <span data-room-code>PB-2026</span>
+        </div>
+        <ol class="leaderboard" data-leaderboard>
+          <li>Loading room...</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="install-panel">
+      <div>
+        <p class="eyebrow">Chrome Extension</p>
+        <h2>Want the overlay?</h2>
+        <p>Install the unpacked extension to see the market drop, match animations, and synced friends tab inside Chrome.</p>
+      </div>
+      <div class="install-actions">
+        <a class="primary-link" href="https://github.com/NachoEstevo/prode-bets" target="_blank" rel="noreferrer">Open GitHub</a>
+        <a class="secondary-link" href="https://github.com/NachoEstevo/prode-bets/archive/refs/heads/main.zip">Download ZIP</a>
+      </div>
+      <ol class="install-steps">
+        <li>Download or clone the repo.</li>
+        <li>Open <code>chrome://extensions</code>.</li>
+        <li>Enable Developer Mode.</li>
+        <li>Click <strong>Load unpacked</strong> and select the <code>extension/</code> folder.</li>
+      </ol>
+    </section>
+  </main>
+
+  <script type="module" src="/rooms/room.js"></script>
+</body>
+</html>

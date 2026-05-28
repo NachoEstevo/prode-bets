@@ -38,6 +38,12 @@ The demo room is wired to Supabase project `aldjnlcdatvajhryzhbz`.
 
 The key in the extension is a public publishable key. RLS keeps this as a hackathon demo surface: public reads and constrained public writes for `PB-*` rooms.
 
+## Public Invite Page
+
+Room invites open a public web fallback at `https://prode-bets.vercel.app/rooms/PB-2026?match=argentina-brazil-demo`.
+
+Friends do not need the extension to join the prode: they can open the invite, submit a pick, and the Supabase leaderboard syncs back into the extension. The extension is only needed for the browser overlay, match drops, and Chrome-native experience.
+
 ## Fast Visual Preview
 
 Open `preview/index.html` in a browser to review the overlay without installing the unpacked extension. This uses a small local Chrome API shim and the same content script/CSS as the real extension.
@@ -63,6 +69,8 @@ The preview is not a separate product surface. It is a local showroom for the sa
 - `extension/src/config/supabase.js`: public Supabase endpoint for the live friends room.
 - `extension/src/shared/sample-match.json`: single demo data source.
 - `extension/src/sports/`: sports scoreboard normalization seams for mocked or third-party feeds.
+- `rooms/`: public invite room page for friends without the extension.
+- `assets/site.css`: public invite page styling.
 - `supabase/migrations/`: database schema and RLS policies for live rooms.
 - `preview/index.html`: local overlay preview for quick visual iteration.
 - `docs/polymarket-handoff.md`: integration notes for the Polymarket lane.

@@ -1,4 +1,4 @@
-const ROOM_BASE_URL = "https://prodebets.app/rooms";
+const ROOM_BASE_URL = "https://prode-bets.vercel.app/rooms";
 
 const slugify = (value) =>
   String(value || "friend")

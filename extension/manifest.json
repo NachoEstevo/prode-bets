@@ -34,8 +34,10 @@
         "src/assets/flags/brazil.svg",
         "src/assets/mascot/picanthe-kickups.svg",
         "src/assets/chili/picanthe-idle-kickups-sheet.png",
+        "src/config/supabase.js",
         "src/social/room-state.js",
         "src/social/room-client.js",
+        "src/social/supabase-room-client.js",
         "src/social/room-panel.js"
       ],
       "matches": ["http://*/*", "https://*/*"]

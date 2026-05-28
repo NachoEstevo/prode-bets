@@ -213,7 +213,9 @@ let cachedData;
 let cachedRoomPanel;
 
 const hideOverlay = () => {
-  document.getElementById(ROOT_ID)?.remove();
+  const root = document.getElementById(ROOT_ID);
+  root?.dispatchEvent(new Event("matchday:destroy"));
+  root?.remove();
 };
 
 const showOverlay = async () => {

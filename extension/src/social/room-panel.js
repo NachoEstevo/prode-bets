@@ -1,4 +1,9 @@
-import { addRoomFriend, copyInviteLink, loadRoom } from "./room-client.js";
+import {
+  addRoomFriend,
+  copyInviteLink,
+  loadRoom,
+  subscribeRoom
+} from "./room-client.js";
 import { createLeaderboard } from "./room-state.js";
 
 const escapeHtml = (value) =>
@@ -53,7 +58,7 @@ export const renderFriendsPanel = (data) => `
     <p>${escapeHtml(data.group.summary)}</p>
     <div class="mm-room-actions">
       <button class="mm-invite-button" type="button" data-action="invite-friend">Copy invite</button>
-      <span data-room-status>${escapeHtml(data.group.inviteCode)} room</span>
+      <span data-room-status>${escapeHtml(data.group.inviteCode)} ${data.group.syncStatus === "supabase" ? "live" : "local"} room</span>
     </div>
     <form class="mm-invite-row" data-room-form>
       <input name="friendName" type="text" placeholder="Friend name" maxlength="24" required>
@@ -70,6 +75,16 @@ export const bindFriendsPanel = (root, data) => {
   const status = root.querySelector("[data-room-status]");
   const list = root.querySelector("[data-friend-list]");
   const form = root.querySelector("[data-room-form]");
+  const paintRoom = (room, message) => {
+    data.group = room;
+    list.innerHTML = renderFriendList(data.group, data.market.outcomes);
+    status.textContent = message;
+  };
+
+  const unsubscribe = subscribeRoom(data.group, data.match.id, (nextRoom) => {
+    paintRoom(nextRoom, "Live leaderboard synced");
+  });
+  root.addEventListener("matchday:destroy", unsubscribe, { once: true });
 
   root.querySelector('[data-action="invite-friend"]')?.addEventListener("click", async () => {
     await copyInviteLink(data.group, data.match.id);
@@ -82,15 +97,14 @@ export const bindFriendsPanel = (root, data) => {
     const outcomeId = String(formData.get("outcomeId") || data.market.outcomes[0]?.id);
     const outcome = data.market.outcomes.find((item) => item.id === outcomeId);
 
-    data.group = await addRoomFriend(data.group, {
+    const nextRoom = await addRoomFriend(data.group, {
       name: formData.get("friendName"),
       outcomeId,
       prediction: `${outcomeLabel(outcome)} pick`,
       points: 10
     }, data.match.id);
 
-    list.innerHTML = renderFriendList(data.group, data.market.outcomes);
-    status.textContent = "Leaderboard updated";
+    paintRoom(nextRoom, "Leaderboard updated");
     form.reset();
   });
 };

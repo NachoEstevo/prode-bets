@@ -153,6 +153,7 @@ test("overlay separates dense content into tabs and renders the mascot", async (
   assert.match(overlayJs, /room-panel\.js/);
   assert.match(roomPanelJs, /data-action="invite-friend"/);
   assert.match(roomPanelJs, /data-action="add-friend"/);
+  assert.match(roomPanelJs, /subscribeRoom/);
   assert.match(overlayJs, /mm-mascot/);
   assert.match(overlayJs, /mm-chili-sprite/);
   assert.match(overlayJs, /flagAsset/);
@@ -176,4 +177,12 @@ test("real flag SVG assets are local and recognizable", async () => {
   assert.match(brazil, /<svg/);
   assert.match(brazil, /#009b3a/i);
   assert.match(brazil, /#ffdf00/i);
+});
+
+test("manifest exposes Supabase room modules to dynamic imports", async () => {
+  const manifest = await readJson("extension/manifest.json");
+  const resources = manifest.web_accessible_resources.flatMap((entry) => entry.resources);
+
+  assert.ok(resources.includes("src/config/supabase.js"));
+  assert.ok(resources.includes("src/social/supabase-room-client.js"));
 });

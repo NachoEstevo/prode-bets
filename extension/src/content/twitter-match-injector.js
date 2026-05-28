@@ -19,20 +19,28 @@
     title: "Argentina vs Brazil",
     closesIn: "18:24",
     marketUrl: "https://polymarket.com",
-    home: {
-      name: "Argentina",
-      probability: 55,
-      volume: "$820K",
-      flagAsset: "src/assets/flags/argentina.svg",
-      accent: "#2f6bff"
-    },
-    away: {
-      name: "Brazil",
-      probability: 45,
-      volume: "$690K",
-      flagAsset: "src/assets/flags/brazil.svg",
-      accent: "#f2c765"
-    }
+    outcomes: [
+      {
+        name: "Argentina",
+        probability: 47,
+        volume: "$820K",
+        flagAsset: "src/assets/flags/argentina.svg",
+        accent: "#2f6bff"
+      },
+      {
+        name: "Draw",
+        probability: 28,
+        volume: "$410K",
+        accent: "#d7c7a0"
+      },
+      {
+        name: "Brazil",
+        probability: 25,
+        volume: "$690K",
+        flagAsset: "src/assets/flags/brazil.svg",
+        accent: "#0f8f49"
+      }
+    ]
   };
 
   const escapeHtml = (value) =>
@@ -60,7 +68,9 @@
   const renderOutcome = (outcome) => `
     <button class="prode-tweet-outcome" type="button" data-action="open-polymarket">
       <span class="prode-tweet-country">
-        <img src="${escapeHtml(getAssetUrl(outcome.flagAsset))}" alt="${escapeHtml(outcome.name)} flag">
+        ${outcome.flagAsset
+          ? `<img src="${escapeHtml(getAssetUrl(outcome.flagAsset))}" alt="${escapeHtml(outcome.name)} flag">`
+          : '<span class="prode-tweet-draw" aria-hidden="true">X</span>'}
         ${escapeHtml(outcome.name)}
       </span>
       <strong style="color:${escapeHtml(outcome.accent)}">${escapeHtml(outcome.probability)}%</strong>
@@ -86,8 +96,7 @@
       </div>
       <h3>${escapeHtml(matchCard.title)}</h3>
       <div class="prode-tweet-grid">
-        ${renderOutcome(matchCard.home)}
-        ${renderOutcome(matchCard.away)}
+        ${matchCard.outcomes.map(renderOutcome).join("")}
       </div>
       <p>Demo mode: this opens Polymarket externally. Prode Bets does not place orders inside X.</p>
     `;

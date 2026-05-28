@@ -97,7 +97,7 @@ header p,
 .outcomes {
   display: grid;
   gap: 10px;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   margin-top: 14px;
 }
 
@@ -105,7 +105,7 @@ header p,
   background: rgba(0, 0, 0, 0.24);
   border: 1px solid rgba(248, 244, 237, 0.1);
   border-radius: 16px;
-  padding: 12px;
+  padding: 10px;
 }
 
 .outcome strong {
@@ -123,10 +123,20 @@ header p,
   width: 26px;
 }
 
+.draw-mark {
+  display: grid;
+  width: 26px;
+  height: 17px;
+  place-items: center;
+  border: 1px solid rgba(248, 244, 237, 0.22);
+  border-radius: 5px;
+  font-size: 11px;
+}
+
 .outcome b {
   color: var(--accent);
   display: block;
-  font-size: 36px;
+  font-size: 30px;
   letter-spacing: -0.04em;
   line-height: 0.88;
   margin-top: 8px;

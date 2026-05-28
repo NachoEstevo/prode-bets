@@ -7,8 +7,8 @@ Chrome extension prototype for football matchdays: a premium prode-style betting
 This repo starts with a no-build Manifest V3 extension. It demonstrates the browser experience without placing real orders:
 
 - pre-match betting-style dropdown
-- two outcome market card
-- friends group leaderboard
+- three outcome football market card, including draw
+- inviteable friends room with persisted local leaderboard updates
 - neo-pixel matchday overlay
 - X/Twitter keyword detector that injects a compact match market card into relevant tweets
 - real country flag assets and a Picanthe chili sprite animation
@@ -48,6 +48,7 @@ The preview is not a separate product surface. It is a local showroom for the sa
 - `extension/manifest.json`: Chrome extension manifest.
 - `extension/src/content/`: injected page overlay, X/Twitter tweet injector, and neo-pixel player styling.
 - `extension/src/popup/`: extension popup.
+- `extension/src/social/`: room state, invite link, and leaderboard helpers.
 - `extension/src/shared/sample-match.json`: single demo data source.
 - `extension/src/sports/`: sports scoreboard normalization seams for mocked or third-party feeds.
 - `preview/index.html`: local overlay preview for quick visual iteration.

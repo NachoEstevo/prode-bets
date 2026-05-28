@@ -60,10 +60,33 @@ test("normalizes a two-outcome Polymarket-like market into overlay market data",
   });
 });
 
-test("rejects markets that do not have exactly two outcomes", () => {
+test("normalizes a three-outcome football market including draw", () => {
+  const normalized = normalizePolymarketMarket({
+    outcomes: [
+      { id: "arg", teamId: "argentina", label: "Argentina wins", price: 0.48 },
+      { id: "draw", teamId: "draw", label: "Draw", price: 0.27 },
+      { id: "bra", teamId: "brazil", label: "Brazil wins", price: 0.25 }
+    ]
+  });
+
+  assert.deepEqual(
+    normalized.outcomes.map((outcome) => ({
+      id: outcome.id,
+      shortLabel: outcome.shortLabel,
+      probability: outcome.probability
+    })),
+    [
+      { id: "arg", shortLabel: "Argentina", probability: 48 },
+      { id: "draw", shortLabel: "Draw", probability: 27 },
+      { id: "bra", shortLabel: "Brazil", probability: 25 }
+    ]
+  );
+});
+
+test("rejects markets that do not have two or three outcomes", () => {
   assert.throws(
     () => normalizePolymarketMarket({ outcomes: [{ id: "a" }] }),
-    /exactly two outcomes/
+    /two or three outcomes/
   );
 });
 

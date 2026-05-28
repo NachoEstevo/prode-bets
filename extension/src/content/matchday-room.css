@@ -1,0 +1,74 @@
+#matchday-markets-root .mm-room-actions {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px;
+  align-items: center;
+  margin-top: 10px;
+}
+
+#matchday-markets-root .mm-room-actions span {
+  overflow: hidden;
+  color: var(--mm-muted);
+  font-size: 11px;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#matchday-markets-root .mm-invite-button,
+#matchday-markets-root .mm-invite-row button {
+  min-height: 32px;
+  border-radius: 10px;
+  background: var(--mm-ink);
+  color: #10100f;
+  font-size: 12px;
+  font-weight: 900;
+  padding: 0 11px;
+}
+
+#matchday-markets-root .mm-invite-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 94px 54px;
+  gap: 7px;
+  margin-top: 9px;
+}
+
+#matchday-markets-root .mm-invite-row input,
+#matchday-markets-root .mm-invite-row select {
+  min-width: 0;
+  min-height: 32px;
+  border: 1px solid rgba(255, 248, 238, 0.12);
+  border-radius: 10px;
+  background: rgba(255, 248, 238, 0.07);
+  color: var(--mm-ink);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 0 9px;
+}
+
+#matchday-markets-root .mm-invite-row select {
+  appearance: none;
+}
+
+#matchday-markets-root .mm-leaderboard-rank {
+  display: grid;
+  width: 26px;
+  height: 32px;
+  place-items: center;
+  border-radius: 10px;
+  background: rgba(255, 248, 238, 0.08);
+  color: var(--mm-muted);
+  font-size: 11px;
+  font-weight: 900;
+}
+
+#matchday-markets-root .mm-friend {
+  grid-template-columns: 26px 32px 1fr auto;
+}
+
+@media (max-width: 420px) {
+  #matchday-markets-root .mm-invite-row {
+    grid-template-columns: 1fr;
+  }
+}

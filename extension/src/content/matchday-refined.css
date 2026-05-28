@@ -5,12 +5,11 @@
   --mm-red: #c9192e;
   font-family: "Cabinet Grotesk", "Outfit", ui-sans-serif, system-ui, sans-serif;
 }
-
 #matchday-markets-root .mm-drop.mm-is-compact {
   top: 18px;
   right: 18px;
   left: auto;
-  width: min(420px, calc(100vw - 28px));
+  width: min(470px, calc(100vw - 28px));
   border: 1px solid var(--mm-line);
   border-radius: 26px;
   background:
@@ -22,13 +21,11 @@
   backdrop-filter: blur(22px);
   animation: mm-compact-in 640ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
-
 #matchday-markets-root .mm-topline {
   color: var(--mm-muted);
   font-size: 10px;
   letter-spacing: 0.16em;
 }
-
 #matchday-markets-root .mm-close,
 #matchday-markets-root .mm-minimize {
   min-height: 28px;
@@ -37,7 +34,6 @@
   color: var(--mm-ink);
   font-size: 11px;
 }
-
 #matchday-markets-root .mm-matchline {
   display: grid;
   grid-template-columns: 42px minmax(0, 1fr) 42px;
@@ -45,7 +41,6 @@
   align-items: center;
   margin-top: 10px;
 }
-
 #matchday-markets-root .mm-matchline h2 {
   margin: 0;
   color: var(--mm-ink);
@@ -55,7 +50,6 @@
   line-height: 0.92;
   text-align: center;
 }
-
 #matchday-markets-root .mm-flag {
   display: block;
   width: 42px;
@@ -65,7 +59,6 @@
   object-fit: cover;
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
 }
-
 #matchday-markets-root .mm-tabs {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -86,7 +79,6 @@
   font-size: 12px;
   font-weight: 900;
 }
-
 #matchday-markets-root .mm-tab-active {
   background: var(--mm-ink);
   color: #10100f;
@@ -95,19 +87,18 @@
 #matchday-markets-root .mm-tab-panel {
   margin-top: 12px;
 }
-
 #matchday-markets-root .mm-tab-panel[hidden] {
   display: none;
 }
 
 #matchday-markets-root .mm-market-grid {
   gap: 8px;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   margin-top: 0;
 }
 
 #matchday-markets-root .mm-outcome {
-  min-height: 164px;
+  min-height: 148px;
   border-radius: 18px;
   background: rgba(255, 248, 238, 0.055);
   padding: 12px;
@@ -119,9 +110,15 @@
 
 #matchday-markets-root .mm-outcome-head span {
   display: flex;
-  align-items: center;
-  gap: 8px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
   min-width: 0;
+  padding-right: 20px;
+}
+
+#matchday-markets-root .mm-outcome-head {
+  position: relative;
 }
 
 #matchday-markets-root .mm-outcome-head .mm-flag {
@@ -129,15 +126,29 @@
   height: 20px;
   border-radius: 6px;
 }
-
+#matchday-markets-root .mm-draw-mark {
+  display: grid;
+  width: 30px;
+  height: 20px;
+  place-items: center;
+  border: 1px solid rgba(255, 248, 238, 0.2);
+  border-radius: 6px;
+  color: var(--mm-ink);
+  font-size: 12px;
+  font-weight: 900;
+}
 #matchday-markets-root .mm-outcome-head strong {
   overflow: hidden;
-  font-size: 13px;
+  max-width: 100%;
+  font-size: 12px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 #matchday-markets-root .mm-outcome-head em {
+  position: absolute;
+  top: 1px;
+  right: 0;
   color: var(--mm-muted);
   font-size: 12px;
   font-style: normal;
@@ -145,10 +156,9 @@
 }
 
 #matchday-markets-root .mm-price {
-  font-size: clamp(44px, 5.2vw, 58px);
-  margin-top: 14px;
+  font-size: clamp(32px, 4.2vw, 44px);
+  margin-top: 12px;
 }
-
 #matchday-markets-root .mm-metrics {
   grid-template-columns: 1fr;
   gap: 5px;
@@ -159,7 +169,6 @@
   border-radius: 8px;
   padding: 6px 7px;
 }
-
 #matchday-markets-root .mm-buy {
   min-height: 36px;
   border-radius: 11px;
@@ -240,7 +249,6 @@
   width: 128px;
   height: 339px;
 }
-
 #matchday-markets-root .mm-chili-sprite img {
   display: block;
   width: 800%;

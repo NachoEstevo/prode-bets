@@ -52,7 +52,7 @@
 .prode-tweet-grid {
   display: grid;
   gap: 10px;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .prode-tweet-outcome {
@@ -66,7 +66,7 @@
   color: inherit;
   cursor: pointer;
   font: inherit;
-  padding: 12px;
+  padding: 10px;
   text-align: left;
   transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
 }
@@ -97,8 +97,20 @@
   object-fit: cover;
 }
 
+.prode-tweet-draw {
+  display: grid;
+  flex: 0 0 auto;
+  width: 34px;
+  height: 20px;
+  place-items: center;
+  border: 1px solid rgba(248, 244, 237, 0.28);
+  border-radius: 6px;
+  color: #f8f4ed;
+  font-size: 12px;
+}
+
 .prode-tweet-outcome strong {
-  font-size: clamp(42px, 8vw, 64px);
+  font-size: clamp(30px, 5.4vw, 48px);
   font-weight: 900;
   letter-spacing: -0.02em;
   line-height: 0.82;

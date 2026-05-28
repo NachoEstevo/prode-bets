@@ -19,7 +19,9 @@ const loadData = async () => {
 const renderOutcome = (outcome, team) => `
   <article class="outcome" style="--accent:${outcome.accent}">
     <strong>
-      <img src="${chrome.runtime.getURL(team.flagAsset)}" alt="${team.name} flag">
+      ${team
+        ? `<img src="${chrome.runtime.getURL(team.flagAsset)}" alt="${team.name} flag">`
+        : '<span class="draw-mark" aria-hidden="true">X</span>'}
       ${outcome.shortLabel}
     </strong>
     <b>${outcome.probability}%</b>

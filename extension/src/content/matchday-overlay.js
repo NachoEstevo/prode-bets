@@ -11,17 +11,20 @@ const fallbackData = {
   market: {
     externalUrl: "https://polymarket.com",
     outcomes: [
-      { id: "argentina-win", teamId: "argentina", shortLabel: "Argentina", probability: 58, volume: "$1.4M", liquidity: "$328K", movement: "+7", accent: "#2774d9" },
-      { id: "brazil-win", teamId: "brazil", shortLabel: "Brazil", probability: 42, volume: "$980K", liquidity: "$214K", movement: "-7", accent: "#0f8f49" }
+      { id: "argentina-win", teamId: "argentina", shortLabel: "Argentina", probability: 48, volume: "$1.4M", liquidity: "$328K", movement: "+5", accent: "#2774d9" },
+      { id: "draw", teamId: "draw", shortLabel: "Draw", probability: 27, volume: "$740K", liquidity: "$180K", movement: "+2", accent: "#d7c7a0" },
+      { id: "brazil-win", teamId: "brazil", shortLabel: "Brazil", probability: 25, volume: "$980K", liquidity: "$214K", movement: "-7", accent: "#0f8f49" }
     ]
   },
   group: {
+    id: "founders-room",
     name: "Founders Room",
-    summary: "Your group is split before kickoff.",
+    inviteCode: "PB-2026",
+    summary: "Invite real friends and watch the leaderboard move live.",
     friends: [
       { name: "Sofi", initials: "SO", outcomeId: "argentina-win", prediction: "Argentina 2-1", points: 12 },
       { name: "Tomi", initials: "TO", outcomeId: "brazil-win", prediction: "Brazil win", points: 9 },
-      { name: "Juli", initials: "JU", outcomeId: "argentina-win", prediction: "Bought Argentina", points: 8 }
+      { name: "Juli", initials: "JU", outcomeId: "draw", prediction: "Draw after 90", points: 10 }
     ]
   },
   mascot: {
@@ -98,6 +101,10 @@ const renderFlag = (team) => `
   <img class="mm-flag" src="${escapeHtml(getAssetUrl(team.flagAsset))}" alt="${escapeHtml(team.name)} flag">
 `;
 
+const renderOutcomeBadge = (outcome, team) => team
+  ? renderFlag(team)
+  : `<span class="mm-draw-mark" role="img" aria-label="${escapeHtml(outcome.shortLabel)}">X</span>`;
+
 const renderMascotSprite = (mascot, className = "") => `
   <span
     class="mm-chili-sprite ${escapeHtml(className)}"
@@ -111,7 +118,7 @@ const renderMascotSprite = (mascot, className = "") => `
 const renderOutcome = (outcome, team) => `
   <article class="mm-outcome" style="--mm-accent:${escapeHtml(outcome.accent)};--mm-height:${outcome.probability}%;">
     <div class="mm-outcome-head">
-      <span>${renderFlag(team)}<strong>${escapeHtml(outcome.shortLabel)}</strong></span>
+      <span>${renderOutcomeBadge(outcome, team)}<strong>${escapeHtml(outcome.shortLabel)}</strong></span>
       <em>${escapeHtml(outcome.movement)}</em>
     </div>
     <div class="mm-price">${escapeHtml(outcome.probability)}%</div>
@@ -122,22 +129,6 @@ const renderOutcome = (outcome, team) => `
     <button class="mm-buy" type="button" data-action="open-market">Buy Yes</button>
   </article>
 `;
-
-const renderFriend = (friend, outcomesById) => {
-  const outcome = outcomesById.get(friend.outcomeId);
-  const pick = outcome ? outcome.shortLabel : "Unknown";
-
-  return `
-    <li class="mm-friend">
-      <span class="mm-avatar">${escapeHtml(friend.initials)}</span>
-      <span>
-        <strong>${escapeHtml(friend.name)}</strong>
-        <small>${escapeHtml(friend.prediction)} on ${escapeHtml(pick)}</small>
-      </span>
-      <b>${escapeHtml(friend.points)} pts</b>
-    </li>
-  `;
-};
 
 const setActiveTab = (root, tabName) => {
   root.querySelectorAll("[data-tab]").forEach((button) => {
@@ -153,9 +144,10 @@ const setActiveTab = (root, tabName) => {
   });
 };
 
-const renderOverlay = (data) => {
+const loadRoomPanel = () => import(getAssetUrl("src/social/room-panel.js"));
+
+const renderOverlay = (data, roomPanel) => {
   const root = document.createElement("section");
-  const outcomesById = new Map(data.market.outcomes.map((outcome) => [outcome.id, outcome]));
   const teamsById = new Map([[data.match.home.id, data.match.home], [data.match.away.id, data.match.away]]);
 
   root.id = ROOT_ID;
@@ -182,14 +174,7 @@ const renderOverlay = (data) => {
         </div>
         <p class="mm-note">Demo mode: opens Polymarket externally. No order is placed here.</p>
       </section>
-      <section class="mm-tab-panel" data-panel="friends" role="tabpanel" hidden>
-        <div class="mm-panel-head">
-          <strong>${escapeHtml(data.group.name)}</strong>
-          <button class="mm-minimize" type="button" data-action="minimize">Minimize</button>
-        </div>
-        <p>${escapeHtml(data.group.summary)}</p>
-        <ul class="mm-friend-list">${data.group.friends.map((friend) => renderFriend(friend, outcomesById)).join("")}</ul>
-      </section>
+      ${roomPanel.renderFriendsPanel(data)}
       <section class="mm-tab-panel" data-panel="motion" role="tabpanel" hidden>
         <div class="mm-mascot-card">
           ${renderMascotSprite(data.mascot, "mm-chili-sprite-large")}
@@ -219,11 +204,13 @@ const renderOverlay = (data) => {
       window.open(data.market.externalUrl, "_blank", "noopener,noreferrer");
     });
   });
+  roomPanel.bindFriendsPanel(root, data);
 
   return root;
 };
 
 let cachedData;
+let cachedRoomPanel;
 
 const hideOverlay = () => {
   document.getElementById(ROOT_ID)?.remove();
@@ -234,8 +221,9 @@ const showOverlay = async () => {
     return;
   }
 
-  cachedData = cachedData || await loadMatchData();
-  document.documentElement.append(renderOverlay(cachedData));
+  cachedRoomPanel = cachedRoomPanel || await loadRoomPanel();
+  cachedData = cachedData || await cachedRoomPanel.prepareRoomData(await loadMatchData());
+  document.documentElement.append(renderOverlay(cachedData, cachedRoomPanel));
 };
 
 const init = async () => {

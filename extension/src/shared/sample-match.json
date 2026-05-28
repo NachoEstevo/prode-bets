@@ -28,18 +28,29 @@
         "teamId": "argentina",
         "label": "Argentina wins",
         "shortLabel": "Argentina",
-        "probability": 58,
+        "probability": 48,
         "volume": "$1.4M",
         "liquidity": "$328K",
-        "movement": "+7",
+        "movement": "+5",
         "accent": "#2774d9"
+      },
+      {
+        "id": "draw",
+        "teamId": "draw",
+        "label": "Draw after 90",
+        "shortLabel": "Draw",
+        "probability": 27,
+        "volume": "$740K",
+        "liquidity": "$180K",
+        "movement": "+2",
+        "accent": "#d7c7a0"
       },
       {
         "id": "brazil-win",
         "teamId": "brazil",
         "label": "Brazil wins",
         "shortLabel": "Brazil",
-        "probability": 42,
+        "probability": 25,
         "volume": "$980K",
         "liquidity": "$214K",
         "movement": "-7",
@@ -50,7 +61,8 @@
   "group": {
     "id": "founders-room",
     "name": "Founders Room",
-    "summary": "Your group is split before kickoff.",
+    "inviteCode": "PB-2026",
+    "summary": "Invite real friends and watch the leaderboard move live.",
     "friends": [
       {
         "id": "sofi",
@@ -72,9 +84,9 @@
         "id": "juli",
         "name": "Juli",
         "initials": "JU",
-        "outcomeId": "argentina-win",
-        "prediction": "Bought Argentina",
-        "points": 8
+        "outcomeId": "draw",
+        "prediction": "Draw after 90",
+        "points": 10
       }
     ]
   },

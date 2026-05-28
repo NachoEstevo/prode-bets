@@ -23,15 +23,17 @@ test("manifest is a Manifest V3 extension with content overlay and popup", async
     "src/content/matchday-overlay.css",
     "src/content/matchday-player.css",
     "src/content/matchday-refined.css",
+    "src/content/matchday-room.css",
     "src/content/twitter-match-injector.css"
   ]);
 });
 
-test("sample match has two outcomes that sum to 100 percent", async () => {
+test("sample match has three outcomes that sum to 100 percent", async () => {
   const sample = await readJson("extension/src/shared/sample-match.json");
   const total = sample.market.outcomes.reduce((sum, outcome) => sum + outcome.probability, 0);
 
-  assert.equal(sample.market.outcomes.length, 2);
+  assert.equal(sample.market.outcomes.length, 3);
+  assert.ok(sample.market.outcomes.some((outcome) => outcome.id === "draw"));
   assert.equal(total, 100);
 });
 
@@ -109,6 +111,7 @@ test("local preview page shims Chrome APIs and loads extension overlay assets", 
   assert.match(previewHtml, /matchday-overlay\.css/);
   assert.match(previewHtml, /matchday-player\.css/);
   assert.match(previewHtml, /matchday-refined\.css/);
+  assert.match(previewHtml, /matchday-room\.css/);
   assert.match(previewHtml, /preview-shim\.js/);
   assert.match(previewHtml, /matchday-overlay\.js/);
   assert.match(previewHtml, /twitter-match-injector\.js/);
@@ -138,17 +141,24 @@ test("twitter injector detects match tweets and keeps real trading external", as
 
 test("overlay separates dense content into tabs and renders the mascot", async () => {
   const overlayJs = await readText("extension/src/content/matchday-overlay.js");
+  const roomPanelJs = await readText("extension/src/social/room-panel.js");
   const refinedCss = await readText("extension/src/content/matchday-refined.css");
+  const roomCss = await readText("extension/src/content/matchday-room.css");
   const mascot = await readText("extension/src/assets/mascot/picanthe-kickups.svg");
 
   assert.match(overlayJs, /role="tablist"/);
   assert.match(overlayJs, /data-tab="market"/);
   assert.match(overlayJs, /data-tab="friends"/);
   assert.match(overlayJs, /data-tab="motion"/);
+  assert.match(overlayJs, /room-panel\.js/);
+  assert.match(roomPanelJs, /data-action="invite-friend"/);
+  assert.match(roomPanelJs, /data-action="add-friend"/);
   assert.match(overlayJs, /mm-mascot/);
   assert.match(overlayJs, /mm-chili-sprite/);
   assert.match(overlayJs, /flagAsset/);
   assert.match(refinedCss, /mm-tab-panel/);
+  assert.match(roomCss, /mm-invite-row/);
+  assert.match(roomCss, /mm-leaderboard-rank/);
   assert.match(refinedCss, /steps\(7\)/);
   assert.match(refinedCss, /translate3d\(-87\.5%/);
   assert.match(refinedCss, /mm-is-compact/);

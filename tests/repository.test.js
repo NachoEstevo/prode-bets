@@ -12,10 +12,14 @@ test("manifest is a Manifest V3 extension with content overlay and popup", async
   assert.equal(manifest.action.default_popup, "src/popup/popup.html");
   assert.equal(manifest.background.service_worker, "src/background/service-worker.js");
   assert.equal(manifest.content_scripts.length, 1);
-  assert.deepEqual(manifest.content_scripts[0].js, ["src/content/matchday-overlay.js"]);
+  assert.deepEqual(manifest.content_scripts[0].js, [
+    "src/content/matchday-overlay.js",
+    "src/content/twitter-match-injector.js"
+  ]);
   assert.deepEqual(manifest.content_scripts[0].css, [
     "src/content/matchday-overlay.css",
-    "src/content/matchday-player.css"
+    "src/content/matchday-player.css",
+    "src/content/twitter-match-injector.css"
   ]);
 });
 
@@ -85,8 +89,24 @@ test("local preview page shims Chrome APIs and loads extension overlay assets", 
   assert.match(previewHtml, /matchday-player\.css/);
   assert.match(previewHtml, /preview-shim\.js/);
   assert.match(previewHtml, /matchday-overlay\.js/);
+  assert.match(previewHtml, /twitter-match-injector\.js/);
   assert.match(previewHtml, /ESPN-style mock/);
+  assert.match(previewHtml, /data-testid="tweet"/);
   assert.match(previewShim, /globalThis\.chrome/);
   assert.match(previewShim, /src\/shared\/sample-match\.json/);
   assert.match(previewCss, /grid-auto-flow:\s*dense/);
+});
+
+test("twitter injector detects match tweets and keeps real trading external", async () => {
+  const injectorJs = await readFile(new URL("../extension/src/content/twitter-match-injector.js", import.meta.url), "utf8");
+  const injectorCss = await readFile(new URL("../extension/src/content/twitter-match-injector.css", import.meta.url), "utf8");
+
+  assert.match(injectorJs, /MutationObserver/);
+  assert.match(injectorJs, /data-testid="tweet"/);
+  assert.match(injectorJs, /world cup|mundial/i);
+  assert.match(injectorJs, /data-prode-bets-injected/);
+  assert.match(injectorJs, /polymarket\.com/);
+  assert.doesNotMatch(injectorJs, /clob\.polymarket\.com\/order|createOrder|postOrder/i);
+  assert.match(injectorCss, /prode-tweet-market/);
+  assert.match(injectorCss, /prode-confetti/);
 });

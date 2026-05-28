@@ -1,0 +1,187 @@
+.prode-tweet-market {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  margin: 14px 0 4px;
+  border: 1px solid rgba(248, 244, 237, 0.16);
+  border-radius: 22px;
+  background:
+    linear-gradient(135deg, rgba(7, 9, 12, 0.96), rgba(7, 9, 12, 0.84)),
+    radial-gradient(circle at 14% 8%, rgba(47, 107, 255, 0.36), transparent 14rem),
+    radial-gradient(circle at 88% 18%, rgba(242, 199, 101, 0.28), transparent 13rem);
+  box-shadow: 0 22px 80px rgba(0, 0, 0, 0.28);
+  color: #f8f4ed;
+  font-family: "Cabinet Grotesk", "Outfit", ui-sans-serif, system-ui, sans-serif;
+  padding: 16px;
+  animation: prode-market-drop 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.prode-tweet-market *,
+.prode-tweet-market *::before,
+.prode-tweet-market *::after {
+  box-sizing: border-box;
+}
+
+.prode-tweet-topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: rgba(248, 244, 237, 0.66);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.prode-tweet-topline b {
+  color: #51d978;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.prode-tweet-market h3 {
+  margin: 9px 0 14px;
+  color: #f8f4ed;
+  font-size: clamp(24px, 4vw, 36px);
+  font-weight: 900;
+  letter-spacing: 0;
+  line-height: 0.92;
+}
+
+.prode-tweet-grid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.prode-tweet-outcome {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+  min-height: 142px;
+  border: 1px solid rgba(248, 244, 237, 0.12);
+  border-radius: 18px;
+  background: rgba(248, 244, 237, 0.055);
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  padding: 12px;
+  text-align: left;
+  transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+}
+
+.prode-tweet-outcome:hover {
+  border-color: rgba(248, 244, 237, 0.3);
+  background: rgba(248, 244, 237, 0.09);
+  transform: translateY(-2px);
+}
+
+.prode-tweet-country {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  color: rgba(248, 244, 237, 0.84);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.prode-tweet-country i {
+  display: block;
+  flex: 0 0 auto;
+  width: 34px;
+  height: 20px;
+  border: 1px solid rgba(248, 244, 237, 0.28);
+  border-radius: 6px;
+}
+
+.prode-tweet-outcome strong {
+  font-size: clamp(42px, 8vw, 64px);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 0.82;
+}
+
+.prode-tweet-bar {
+  display: block;
+  overflow: hidden;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(248, 244, 237, 0.16);
+}
+
+.prode-tweet-bar b {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+}
+
+.prode-tweet-outcome small,
+.prode-tweet-market p {
+  color: rgba(248, 244, 237, 0.62);
+  font-family: "Outfit", ui-sans-serif, system-ui, sans-serif;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.prode-tweet-market p {
+  margin: 12px 0 0;
+}
+
+.prode-confetti {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.prode-confetti i {
+  position: absolute;
+  top: -12px;
+  left: calc(8% + var(--i) * 8.6%);
+  width: 6px;
+  height: 12px;
+  border-radius: 2px;
+  background: hsl(calc(36deg + var(--i) * 29deg), 88%, 62%);
+  opacity: 0;
+  transform: translateY(-18px) rotate(0deg);
+  animation: prode-confetti-fall 1100ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(var(--i) * 58ms);
+}
+
+@keyframes prode-market-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes prode-confetti-fall {
+  0% {
+    opacity: 0;
+    transform: translateY(-18px) rotate(0deg);
+  }
+  24% {
+    opacity: 0.82;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(154px) rotate(260deg);
+  }
+}
+
+@media (max-width: 520px) {
+  .prode-tweet-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .prode-tweet-topline {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

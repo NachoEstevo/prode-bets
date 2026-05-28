@@ -8,8 +8,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@500;700;800;900&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./demo.css">
+  <link rel="stylesheet" href="./twitter-demo.css">
   <link rel="stylesheet" href="../extension/src/content/matchday-overlay.css">
   <link rel="stylesheet" href="../extension/src/content/matchday-player.css">
+  <link rel="stylesheet" href="../extension/src/content/twitter-match-injector.css">
 </head>
 <body>
   <main>
@@ -63,9 +65,53 @@
         <p>Sofi leads, Tomi fades, Juli bought the favorite. The group is social; real money stays in the market lane.</p>
       </article>
     </section>
+
+    <section class="twitter-lab" aria-label="Twitter match detection demo">
+      <div class="twitter-lab-copy">
+        <p class="demo-kicker">X/Twitter layer</p>
+        <h2>When the feed starts talking Mundial, the market appears inside the conversation.</h2>
+        <p>The extension watches tweet articles with a MutationObserver, detects match keywords, and injects a compact betting card. In production this can deep-link into Polymarket while the friends prode stays social.</p>
+      </div>
+
+      <div class="tweet-stack">
+        <article class="mock-tweet" data-testid="tweet" data-prode-demo-tweet="true">
+          <header>
+            <span class="tweet-avatar">PB</span>
+            <div>
+              <strong>Prode Bets Room</strong>
+              <small>@prodebets · 2m</small>
+            </div>
+          </header>
+          <p>Argentina Brazil is exactly the kind of Mundial match where the group chat stops pretending anyone is working.</p>
+        </article>
+
+        <article class="mock-tweet" data-testid="tweet" data-prode-demo-tweet="true">
+          <header>
+            <span class="tweet-avatar tweet-avatar-alt">FM</span>
+            <div>
+              <strong>Football Market Watch</strong>
+              <small>@matchdesk · 8m</small>
+            </div>
+          </header>
+          <p>No keyword here yet, so this post should stay clean. The injector needs restraint as much as spectacle.</p>
+        </article>
+
+        <article class="mock-tweet" data-testid="tweet" data-prode-demo-tweet="true">
+          <header>
+            <span class="tweet-avatar tweet-avatar-hot">PK</span>
+            <div>
+              <strong>Penalty Room</strong>
+              <small>@penaltyroom · 11m</small>
+            </div>
+          </header>
+          <p>If this final goes to penales, every meeting invite should be considered emotionally invalid.</p>
+        </article>
+      </div>
+    </section>
   </main>
 
   <script src="./preview-shim.js"></script>
   <script src="../extension/src/content/matchday-overlay.js"></script>
+  <script src="../extension/src/content/twitter-match-injector.js"></script>
 </body>
 </html>

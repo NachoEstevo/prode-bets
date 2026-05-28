@@ -15,8 +15,12 @@
   "content_scripts": [
     {
       "matches": ["http://*/*", "https://*/*"],
-      "js": ["src/content/matchday-overlay.js"],
-      "css": ["src/content/matchday-overlay.css", "src/content/matchday-player.css"],
+      "js": ["src/content/matchday-overlay.js", "src/content/twitter-match-injector.js"],
+      "css": [
+        "src/content/matchday-overlay.css",
+        "src/content/matchday-player.css",
+        "src/content/twitter-match-injector.css"
+      ],
       "run_at": "document_idle"
     }
   ],

@@ -10,6 +10,7 @@ This repo starts with a no-build Manifest V3 extension. It demonstrates the brow
 - two outcome market card
 - friends group leaderboard
 - neo-pixel matchday overlay
+- X/Twitter keyword detector that injects a compact match market card into relevant tweets
 - shared sample match data
 - Polymarket integration notes for the next engineer
 
@@ -31,6 +32,8 @@ Open `preview/index.html` in a browser to review the overlay without installing 
 
 The preview references an ESPN-style mock feed. ESPN does not provide a clearly supported public soccer API for this prototype, so the repo currently includes a normalizer for scoreboard-shaped mock data in `extension/src/sports/normalize-espn-scoreboard.js`.
 
+The preview is not a separate product surface. It is a local showroom for the same Manifest V3 content scripts that run in Chrome: the global matchday overlay plus the X/Twitter tweet injector.
+
 ## Load The Extension
 
 1. Open `chrome://extensions`.
@@ -42,7 +45,7 @@ The preview references an ESPN-style mock feed. ESPN does not provide a clearly 
 ## Repo Map
 
 - `extension/manifest.json`: Chrome extension manifest.
-- `extension/src/content/`: injected page overlay and neo-pixel player styling.
+- `extension/src/content/`: injected page overlay, X/Twitter tweet injector, and neo-pixel player styling.
 - `extension/src/popup/`: extension popup.
 - `extension/src/shared/sample-match.json`: single demo data source.
 - `extension/src/sports/`: sports scoreboard normalization seams for mocked or third-party feeds.

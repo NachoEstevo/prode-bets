@@ -3,7 +3,21 @@
   "name": "Prode Bets",
   "version": "0.1.0",
   "description": "Prode-style pre-match betting drops, friends leaderboard context, and a future lane for Polymarket trading.",
-  "permissions": ["activeTab", "alarms", "storage"],
+  "permissions": [
+    "activeTab",
+    "alarms",
+    "identity",
+    "storage"
+  ],
+  "host_permissions": [
+    "https://www.googleapis.com/*"
+  ],
+  "oauth2": {
+    "client_id": "451903365601-r1ob21j89148demr8ulsi1fdh6v40ukn.apps.googleusercontent.com",
+    "scopes": [
+      "https://www.googleapis.com/auth/calendar.events"
+    ]
+  },
   "background": {
     "service_worker": "src/background/service-worker.js",
     "type": "module"
@@ -14,8 +28,14 @@
   },
   "content_scripts": [
     {
-      "matches": ["http://*/*", "https://*/*"],
-      "js": ["src/content/matchday-overlay.js", "src/content/twitter-match-injector.js"],
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "js": [
+        "src/content/matchday-overlay.js",
+        "src/content/twitter-match-injector.js"
+      ],
       "css": [
         "src/content/matchday-overlay.css",
         "src/content/matchday-player.css",
@@ -34,13 +54,19 @@
         "src/assets/flags/brazil.svg",
         "src/assets/mascot/picanthe-kickups.svg",
         "src/assets/chili/picanthe-idle-kickups-sheet.png",
+        "src/calendar/calendar-panel.js",
+        "src/calendar/world-cup-calendar.js",
         "src/config/supabase.js",
         "src/social/room-state.js",
         "src/social/room-client.js",
         "src/social/supabase-room-client.js",
         "src/social/room-panel.js"
       ],
-      "matches": ["http://*/*", "https://*/*"]
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ]
     }
-  ]
+  ],
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzNngNVNYNMM+MwZ4+moYy+5bkvrsu4Zh0jx+439/5YfOHYy5AL9CUkQ4b8F2+DJTyzJFKGlzYp0aQRDBHogX84R3xNoQzDEFir8L/kyJeopzVfVbUJ001s361Y+MnstJ2WnPYOZRtKtvbPgdPOVzLDC8puG9G7WYup50x+NIybTeo/GFcA0OWebFIEcArFFpE+Z35I5ATRZ/ERgt+vOlWumYtX2rjMksTvCwQO05Tni3FwWvVPsueoFaJx5FeMH2P/j3XVqtu2+06xQOLQD6sa71Lau80aIkf75Fl6TeH4FKpGrAl5th3kNmvWUsxlrKwwqkkcA7pccLR83Qx56JQQIDAQAB"
 }

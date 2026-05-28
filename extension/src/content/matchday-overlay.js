@@ -145,8 +145,9 @@ const setActiveTab = (root, tabName) => {
 };
 
 const loadRoomPanel = () => import(getAssetUrl("src/social/room-panel.js"));
+const loadCalendarPanel = () => import(getAssetUrl("src/calendar/calendar-panel.js"));
 
-const renderOverlay = (data, roomPanel) => {
+const renderOverlay = (data, roomPanel, calendarPanel) => {
   const root = document.createElement("section");
   const teamsById = new Map([[data.match.home.id, data.match.home], [data.match.away.id, data.match.away]]);
 
@@ -166,7 +167,7 @@ const renderOverlay = (data, roomPanel) => {
       <div class="mm-tabs" role="tablist" aria-label="Matchday views">
         <button class="mm-tab mm-tab-active" type="button" role="tab" aria-selected="true" data-tab="market">Market</button>
         <button class="mm-tab" type="button" role="tab" aria-selected="false" data-tab="friends">Friends</button>
-        <button class="mm-tab" type="button" role="tab" aria-selected="false" data-tab="motion">Mascot</button>
+        <button class="mm-tab" type="button" role="tab" aria-selected="false" data-tab="calendar">Calendar</button>
       </div>
       <section class="mm-tab-panel mm-tab-panel-active" data-panel="market" role="tabpanel">
         <div class="mm-market-grid">
@@ -175,12 +176,7 @@ const renderOverlay = (data, roomPanel) => {
         <p class="mm-note">Demo mode: opens Polymarket externally. No order is placed here.</p>
       </section>
       ${roomPanel.renderFriendsPanel(data)}
-      <section class="mm-tab-panel" data-panel="motion" role="tabpanel" hidden>
-        <div class="mm-mascot-card">
-          ${renderMascotSprite(data.mascot, "mm-chili-sprite-large")}
-          <p>${escapeHtml(data.mascot.caption)}</p>
-        </div>
-      </section>
+      ${calendarPanel.renderCalendarPanel()}
     </div>
 
     <div class="mm-mascot" aria-hidden="true">
@@ -205,12 +201,14 @@ const renderOverlay = (data, roomPanel) => {
     });
   });
   roomPanel.bindFriendsPanel(root, data);
+  calendarPanel.bindCalendarPanel(root);
 
   return root;
 };
 
 let cachedData;
 let cachedRoomPanel;
+let cachedCalendarPanel;
 
 const hideOverlay = () => {
   const root = document.getElementById(ROOT_ID);
@@ -224,8 +222,9 @@ const showOverlay = async () => {
   }
 
   cachedRoomPanel = cachedRoomPanel || await loadRoomPanel();
+  cachedCalendarPanel = cachedCalendarPanel || await loadCalendarPanel();
   cachedData = cachedData || await cachedRoomPanel.prepareRoomData(await loadMatchData());
-  document.documentElement.append(renderOverlay(cachedData, cachedRoomPanel));
+  document.documentElement.append(renderOverlay(cachedData, cachedRoomPanel, cachedCalendarPanel));
 };
 
 const init = async () => {

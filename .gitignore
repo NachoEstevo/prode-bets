@@ -8,6 +8,7 @@ build/
 .superpowers/
 .worktrees
 .worktrees/
+tmp/
 coverage/
 npm-debug.log*
 extension/src/assets/chili/picanthe-*.png

@@ -149,8 +149,10 @@ test("overlay separates dense content into tabs and renders the mascot", async (
   assert.match(overlayJs, /role="tablist"/);
   assert.match(overlayJs, /data-tab="market"/);
   assert.match(overlayJs, /data-tab="friends"/);
-  assert.match(overlayJs, /data-tab="motion"/);
+  assert.match(overlayJs, /data-tab="calendar"/);
+  assert.doesNotMatch(overlayJs, />Mascot</);
   assert.match(overlayJs, /room-panel\.js/);
+  assert.match(overlayJs, /calendar-panel\.js/);
   assert.match(roomPanelJs, /data-action="invite-friend"/);
   assert.match(roomPanelJs, /data-action="add-friend"/);
   assert.match(roomPanelJs, /subscribeRoom/);
@@ -158,6 +160,7 @@ test("overlay separates dense content into tabs and renders the mascot", async (
   assert.match(overlayJs, /mm-chili-sprite/);
   assert.match(overlayJs, /flagAsset/);
   assert.match(refinedCss, /mm-tab-panel/);
+  assert.match(refinedCss, /mm-calendar-panel/);
   assert.match(roomCss, /mm-invite-row/);
   assert.match(roomCss, /mm-leaderboard-rank/);
   assert.match(refinedCss, /steps\(7\)/);
@@ -185,4 +188,17 @@ test("manifest exposes Supabase room modules to dynamic imports", async () => {
 
   assert.ok(resources.includes("src/config/supabase.js"));
   assert.ok(resources.includes("src/social/supabase-room-client.js"));
+});
+
+test("manifest exposes Google Calendar modules and OAuth wiring", async () => {
+  const manifest = await readJson("extension/manifest.json");
+  const resources = manifest.web_accessible_resources.flatMap((entry) => entry.resources);
+
+  assert.ok(manifest.permissions.includes("identity"));
+  assert.ok(manifest.host_permissions.includes("https://www.googleapis.com/*"));
+  assert.match(manifest.oauth2.client_id, /^[a-z0-9-]+\.apps\.googleusercontent\.com$/);
+  assert.ok(!manifest.oauth2.client_id.includes("YOUR_GOOGLE"));
+  assert.ok(manifest.oauth2.scopes.includes("https://www.googleapis.com/auth/calendar.events"));
+  assert.ok(resources.includes("src/calendar/calendar-panel.js"));
+  assert.ok(resources.includes("src/calendar/world-cup-calendar.js"));
 });

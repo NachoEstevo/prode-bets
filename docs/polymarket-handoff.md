@@ -49,16 +49,23 @@ extension/src/polymarket/
 
 The first pure seam now exists at `extension/src/polymarket/normalize-market.js`. Feed it a two- or three-outcome market-like object and it returns the internal `market` shape used by `sample-match.json`. Keep network fetching and order submission outside that file.
 
-## Backend Option
+## Backend
 
-The current friends room persists in `chrome.storage.local` through `extension/src/social/room-client.js`. Use Supabase or Neon when groups need cross-device sync:
+The current friends room is wired to Supabase through `extension/src/social/room-client.js` and `extension/src/social/supabase-room-client.js`. It uses the public REST API with a publishable key and falls back to `chrome.storage.local` only if remote sync fails.
 
-- users
-- groups
-- memberships
-- picks
+Current live demo:
+
+- project: `aldjnlcdatvajhryzhbz`
+- tables: `rooms`, `room_picks`
+- migrations: `supabase/migrations/`
+
+Future backend work:
+
+- authenticated users
+- group memberships
 - match events
 - leaderboard snapshots
+- private room permissions
 
 Do not store private keys, wallet secrets, or Polymarket API secrets in the extension repo.
 

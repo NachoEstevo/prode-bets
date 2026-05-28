@@ -8,7 +8,7 @@ This repo starts with a no-build Manifest V3 extension. It demonstrates the brow
 
 - pre-match betting-style dropdown
 - three outcome football market card, including draw
-- inviteable friends room with persisted local leaderboard updates
+- inviteable friends room with Supabase-backed live leaderboard updates
 - neo-pixel matchday overlay
 - X/Twitter keyword detector that injects a compact match market card into relevant tweets
 - real country flag assets and a Picanthe chili sprite animation
@@ -26,6 +26,17 @@ The friends layer is social only: picks, points, leaderboard, and reactions. It 
 ```bash
 npm test
 ```
+
+## Supabase Live Room
+
+The demo room is wired to Supabase project `aldjnlcdatvajhryzhbz`.
+
+- API URL: `https://aldjnlcdatvajhryzhbz.supabase.co`
+- tables: `rooms`, `room_picks`
+- migrations: `supabase/migrations/`
+- extension config: `extension/src/config/supabase.js`
+
+The key in the extension is a public publishable key. RLS keeps this as a hackathon demo surface: public reads and constrained public writes for `PB-*` rooms.
 
 ## Fast Visual Preview
 
@@ -49,8 +60,10 @@ The preview is not a separate product surface. It is a local showroom for the sa
 - `extension/src/content/`: injected page overlay, X/Twitter tweet injector, and neo-pixel player styling.
 - `extension/src/popup/`: extension popup.
 - `extension/src/social/`: room state, invite link, and leaderboard helpers.
+- `extension/src/config/supabase.js`: public Supabase endpoint for the live friends room.
 - `extension/src/shared/sample-match.json`: single demo data source.
 - `extension/src/sports/`: sports scoreboard normalization seams for mocked or third-party feeds.
+- `supabase/migrations/`: database schema and RLS policies for live rooms.
 - `preview/index.html`: local overlay preview for quick visual iteration.
 - `docs/polymarket-handoff.md`: integration notes for the Polymarket lane.
 - `docs/superpowers/specs/`: product/design spec.

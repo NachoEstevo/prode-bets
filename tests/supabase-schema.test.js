@@ -17,3 +17,13 @@ test("Supabase migration creates shared rooms and guarded public picks", async (
   assert.match(sql, /unique \(invite_code\)/i);
   assert.match(sql, /primary key \(room_id, id\)/i);
 });
+
+test("Supabase write policies are constrained for public demo rooms", async () => {
+  const sql = await readText("supabase/migrations/20260528_tighten_room_rls.sql");
+
+  assert.match(sql, /drop policy if exists "demo rooms can be upserted"/i);
+  assert.match(sql, /invite_code ~ '\^PB-/i);
+  assert.match(sql, /char_length\(name\) between 1 and 48/i);
+  assert.doesNotMatch(sql, /for update[\s\S]*using \(true\)/i);
+  assert.doesNotMatch(sql, /for insert[\s\S]*with check \(true\)/i);
+});

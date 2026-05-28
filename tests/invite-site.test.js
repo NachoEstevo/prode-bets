@@ -20,6 +20,7 @@ test("public room page explains extension install and GitHub fallback", async ()
   const html = await readText("rooms/index.html");
   const js = await readText("rooms/room.js");
   const css = await readText("assets/site.css");
+  const pbFallback = await readText("rooms/PB-2026/index.html");
   const vercel = await readText("vercel.json");
 
   assert.match(html, /data-room-app/);
@@ -31,6 +32,7 @@ test("public room page explains extension install and GitHub fallback", async ()
   assert.match(js, /SUPABASE_CONFIG/);
   assert.match(js, /endsWith\("\.html"\)/);
   assert.match(css, /room-shell/);
+  assert.match(pbFallback, /\/rooms\?room=PB-2026/);
   assert.ok(vercel.includes('"source": "/rooms/:code"'));
   assert.ok(vercel.includes('"destination": "/rooms/index.html"'));
 });

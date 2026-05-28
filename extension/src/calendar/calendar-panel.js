@@ -2,6 +2,7 @@ import {
   WORLD_CUP_COUNTRIES,
   getMatchesForCountries
 } from "./world-cup-calendar.js";
+import { buildIcsCalendar, buildIcsFilename } from "./ics-calendar.js";
 
 const escapeHtml = (value) =>
   String(value).replace(/[&<>"']/g, (char) => ({
@@ -43,7 +44,10 @@ export const renderCalendarPanel = () => `
       </div>
       <div class="mm-calendar-footer">
         <p data-calendar-status>Loading Calendar state...</p>
-        <button class="mm-calendar-sync" type="button" data-action="sync-calendar">Connect Google Calendar</button>
+        <div class="mm-calendar-actions">
+          <button class="mm-calendar-ics" type="button" data-action="download-ics">Download .ics</button>
+          <button class="mm-calendar-sync" type="button" data-action="sync-calendar">Connect Google Calendar</button>
+        </div>
       </div>
     </div>
   </section>
@@ -62,7 +66,9 @@ const summarize = ({ selectedCountryIds, configured }) => {
   const matchCount = getMatchesForCountries(selectedCountryIds).length;
 
   if (!configured) {
-    return "Google Calendar is not configured yet. Add the OAuth client id to enable one-click sync.";
+    return selectedCountryIds.length === 0
+      ? "Select countries, then download an .ics file or connect Google Calendar."
+      : `${selectedCountryIds.length} countries selected - ${matchCount} known match blocks. Download .ics works without Google auth.`;
   }
 
   if (selectedCountryIds.length === 0) {
@@ -76,6 +82,7 @@ export const bindCalendarPanel = async (root) => {
   const inputs = [...root.querySelectorAll("[data-calendar-country-input]")];
   const status = root.querySelector("[data-calendar-status]");
   const syncButton = root.querySelector('[data-action="sync-calendar"]');
+  const icsButton = root.querySelector('[data-action="download-ics"]');
   const search = root.querySelector("[data-calendar-search]");
   const counts = root.querySelectorAll("[data-calendar-match-count]");
   const stateResponse = await sendRuntimeMessage({ type: "matchday:getState" });
@@ -94,7 +101,8 @@ export const bindCalendarPanel = async (root) => {
       input.checked = selected.has(input.value);
     });
     status.textContent = summarize({ selectedCountryIds, configured });
-    syncButton.textContent = configured ? "Block selected matches" : "Connect Google Calendar";
+    syncButton.textContent = configured ? "Block selected matches" : "Connect Google";
+    icsButton.disabled = getMatchesForCountries(selectedCountryIds).length === 0;
   };
 
   const persistSelection = async () => {
@@ -123,6 +131,28 @@ export const bindCalendarPanel = async (root) => {
     });
   });
 
+  icsButton.addEventListener("click", () => {
+    const matches = getMatchesForCountries(selectedCountryIds);
+
+    if (matches.length === 0) {
+      status.textContent = "Select a country with known fixtures before downloading .ics.";
+      return;
+    }
+
+    const blob = new Blob([buildIcsCalendar(selectedCountryIds)], {
+      type: "text/calendar;charset=utf-8"
+    });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = buildIcsFilename(selectedCountryIds);
+    root.append(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+    status.textContent = `${matches.length} match blocks downloaded as .ics. Import it into Google Calendar.`;
+  });
+
   syncButton.addEventListener("click", async () => {
     status.textContent = configured ? "Creating calendar blocks..." : "Google Calendar setup is required.";
     const response = await sendRuntimeMessage({ type: "matchday:calendarSync" });
@@ -133,7 +163,7 @@ export const bindCalendarPanel = async (root) => {
       return;
     }
 
-    status.textContent = response?.message || "Calendar sync is not available yet.";
+    status.textContent = `${response?.message || "Calendar sync is not available yet."} Download .ics instead.`;
   });
 
   render();

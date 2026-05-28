@@ -19,6 +19,7 @@ test("manifest is a Manifest V3 extension with content overlay and popup", async
   assert.equal(manifest.content_scripts.length, 1);
   assert.deepEqual(manifest.content_scripts[0].js, [
     "src/content/matchday-overlay.js",
+    "src/content/score-alert-overlay.js",
     "src/content/twitter-match-injector.js"
   ]);
   assert.deepEqual(manifest.content_scripts[0].css, [
@@ -26,6 +27,7 @@ test("manifest is a Manifest V3 extension with content overlay and popup", async
     "src/content/matchday-player.css",
     "src/content/matchday-refined.css",
     "src/content/matchday-room.css",
+    "src/content/score-alert-overlay.css",
     "src/content/twitter-match-injector.css"
   ]);
 });
@@ -107,6 +109,26 @@ test("popup exposes overlay controls and content script listens for visibility m
   assert.match(contentJs, /matchday:overlayVisibilityChanged/);
 });
 
+test("goal alert hook can broadcast a compact score overlay", async () => {
+  const serviceWorker = await readText("extension/src/background/service-worker.js");
+  const contentJs = await readText("extension/src/content/score-alert-overlay.js");
+  const alertCss = await readText("extension/src/content/score-alert-overlay.css");
+  const popupHtml = await readText("extension/src/popup/popup.html");
+  const popupJs = await readText("extension/src/popup/popup.js");
+  const previewShim = await readText("preview/preview-shim.js");
+
+  assert.match(serviceWorker, /buildGoalAlert/);
+  assert.match(serviceWorker, /matchday:scorePoll/);
+  assert.match(serviceWorker, /matchday:goalAlert/);
+  assert.match(contentJs, /showGoalAlert/);
+  assert.match(contentJs, /prode-bets:goalAlert/);
+  assert.match(alertCss, /mm-goal-toast/);
+  assert.match(alertCss, /mm-goal-mascot/);
+  assert.match(popupHtml, /data-action="demo-goal"/);
+  assert.match(popupJs, /buildDemoGoalAlert/);
+  assert.match(previewShim, /data-demo-goal/);
+});
+
 test("local preview page shims Chrome APIs and loads extension overlay assets", async () => {
   const previewHtml = await readText("preview/index.html");
   const previewShim = await readText("preview/preview-shim.js");
@@ -117,8 +139,10 @@ test("local preview page shims Chrome APIs and loads extension overlay assets", 
   assert.match(previewHtml, /matchday-player\.css/);
   assert.match(previewHtml, /matchday-refined\.css/);
   assert.match(previewHtml, /matchday-room\.css/);
+  assert.match(previewHtml, /score-alert-overlay\.css/);
   assert.match(previewHtml, /preview-shim\.js/);
   assert.match(previewHtml, /matchday-overlay\.js/);
+  assert.match(previewHtml, /score-alert-overlay\.js/);
   assert.match(previewHtml, /twitter-match-injector\.js/);
   assert.match(previewHtml, /ESPN-style mock/);
   assert.match(previewHtml, /data-testid="tweet"/);
@@ -212,5 +236,6 @@ test("manifest exposes Google Calendar modules and OAuth wiring", async () => {
   assert.ok(!manifest.oauth2.client_id.includes("YOUR_GOOGLE"));
   assert.ok(manifest.oauth2.scopes.includes("https://www.googleapis.com/auth/calendar.events"));
   assert.ok(resources.includes("src/calendar/calendar-panel.js"));
+  assert.ok(resources.includes("src/calendar/ics-calendar.js"));
   assert.ok(resources.includes("src/calendar/world-cup-calendar.js"));
 });

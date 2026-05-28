@@ -335,17 +335,37 @@
   margin: 0;
 }
 
-#matchday-markets-root .mm-calendar-sync {
+#matchday-markets-root .mm-calendar-actions {
+  display: flex;
+  gap: 6px;
+}
+
+#matchday-markets-root .mm-calendar-sync,
+#matchday-markets-root .mm-calendar-ics {
   min-height: 38px;
   border: 0;
   border-radius: 12px;
-  background: var(--mm-ink);
-  color: #10100f;
   cursor: pointer;
   font: inherit;
   font-size: 12px;
   font-weight: 900;
   padding: 0 12px;
+}
+
+#matchday-markets-root .mm-calendar-sync {
+  background: var(--mm-ink);
+  color: #10100f;
+}
+
+#matchday-markets-root .mm-calendar-ics {
+  border: 1px solid rgba(255, 248, 238, 0.18);
+  background: rgba(255, 248, 238, 0.07);
+  color: var(--mm-ink);
+}
+
+#matchday-markets-root .mm-calendar-ics:disabled {
+  cursor: not-allowed;
+  opacity: 0.46;
 }
 
 #matchday-markets-root .mm-mascot {

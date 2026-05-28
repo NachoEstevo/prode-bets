@@ -42,3 +42,34 @@ globalThis.chrome = {
     lastError: null
   }
 };
+
+const buildPreviewGoalAlert = async () => {
+  const response = await fetch(globalThis.__PRODE_PREVIEW_GET_URL__("src/shared/sample-match.json"));
+  const data = await response.json();
+  const homeScore = Number(data.match.home.score || 0) + 1;
+  const awayScore = Number(data.match.away.score || 0);
+
+  return {
+    type: "goal",
+    matchId: data.match.id,
+    matchTitle: data.match.title,
+    scoringSide: "home",
+    scoringTeamName: data.match.home.name,
+    scoreLabel: `${homeScore} - ${awayScore}`,
+    home: { ...data.match.home, score: homeScore },
+    away: { ...data.match.away, score: awayScore },
+    mascot: data.mascot
+  };
+};
+
+document.addEventListener("click", async (event) => {
+  const button = event.target.closest("[data-demo-goal]");
+
+  if (!button) {
+    return;
+  }
+
+  window.dispatchEvent(new CustomEvent("prode-bets:goalAlert", {
+    detail: await buildPreviewGoalAlert()
+  }));
+});

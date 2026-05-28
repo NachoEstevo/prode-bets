@@ -36,6 +36,7 @@
       ],
       "js": [
         "src/content/matchday-overlay.js",
+        "src/content/score-alert-overlay.js",
         "src/content/twitter-match-injector.js"
       ],
       "css": [
@@ -43,6 +44,7 @@
         "src/content/matchday-player.css",
         "src/content/matchday-refined.css",
         "src/content/matchday-room.css",
+        "src/content/score-alert-overlay.css",
         "src/content/twitter-match-injector.css"
       ],
       "run_at": "document_idle"
@@ -59,6 +61,7 @@
         "src/assets/mascot/picanthe-kickups.svg",
         "src/assets/chili/picanthe-idle-kickups-sheet.png",
         "src/calendar/calendar-panel.js",
+        "src/calendar/ics-calendar.js",
         "src/calendar/world-cup-calendar.js",
         "src/config/supabase.js",
         "src/social/room-state.js",

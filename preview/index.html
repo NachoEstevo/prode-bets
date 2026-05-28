@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Prode Bets Preview</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23f8f4ed'/%3E%3Ccircle cx='16' cy='16' r='8' fill='%23050608'/%3E%3Cpath d='M16 2a14 14 0 0 1 14 14H16Z' fill='%2351d978'/%3E%3Cpath d='M16 16h14a14 14 0 0 1-14 14Z' fill='%23e31791'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@500;700;800;900&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -13,12 +14,14 @@
   <link rel="stylesheet" href="../extension/src/content/matchday-player.css?v=social">
   <link rel="stylesheet" href="../extension/src/content/matchday-refined.css?v=social">
   <link rel="stylesheet" href="../extension/src/content/matchday-room.css?v=social">
+  <link rel="stylesheet" href="../extension/src/content/score-alert-overlay.css?v=social">
   <link rel="stylesheet" href="../extension/src/content/twitter-match-injector.css?v=social">
 </head>
 <body>
   <main>
     <nav class="demo-nav" aria-label="Demo">
       <a class="demo-brand" href="#"><span></span> Prode Bets</a>
+      <button class="demo-action" type="button" data-demo-goal>Trigger goal</button>
       <div class="demo-nav-copy">ESPN-style mock feed · Polymarket-style market · friends room</div>
       <a class="demo-action" href="../extension/manifest.json">Extension manifest</a>
     </nav>
@@ -114,6 +117,7 @@
 
   <script src="./preview-shim.js?v=social"></script>
   <script src="../extension/src/content/matchday-overlay.js?v=social"></script>
+  <script src="../extension/src/content/score-alert-overlay.js?v=social"></script>
   <script src="../extension/src/content/twitter-match-injector.js?v=social"></script>
 </body>
 </html>

@@ -10,6 +10,10 @@ import {
   WORLD_CUP_COUNTRIES,
   getMatchesForCountries
 } from "../extension/src/calendar/world-cup-calendar.js";
+import {
+  buildIcsCalendar,
+  buildIcsFilename
+} from "../extension/src/calendar/ics-calendar.js";
 
 test("world cup calendar fixture exposes grouped countries and known matches", () => {
   assert.equal(WORLD_CUP_COUNTRIES.length, 48);
@@ -34,6 +38,16 @@ test("builds Google Calendar event payloads from match fixtures", () => {
   assert.equal(event.location, "Kansas City Stadium");
   assert.equal(event.transparency, "opaque");
   assert.equal(event.extendedProperties.private.prodeBetsMatchId, match.id);
+});
+
+test("builds downloadable ICS calendar content for selected countries", () => {
+  const ics = buildIcsCalendar(["argentina"]);
+
+  assert.match(ics, /^BEGIN:VCALENDAR/);
+  assert.match(ics, /SUMMARY:World Cup 2026: Argentina vs Algeria/);
+  assert.match(ics, /TRANSP:OPAQUE/);
+  assert.match(ics, /UID:wc2026-j-argentina-algeria@prode-bets.local/);
+  assert.equal(buildIcsFilename(["argentina"]), "prode-bets-world-cup-argentina.ics");
 });
 
 test("sync returns not_configured until OAuth client id is set", async () => {

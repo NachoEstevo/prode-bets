@@ -1,10 +1,12 @@
 import { DEFAULT_STATE } from "../shared/matchday-state.js";
+import { buildDemoGoalAlert } from "../shared/score-alerts.js";
 
 const card = document.querySelector("#match-card");
 const marketLink = document.querySelector("#market-link");
 const stateLabel = document.querySelector("#state-label");
 const showButton = document.querySelector('[data-action="show-overlay"]');
 const hideButton = document.querySelector('[data-action="hide-overlay"]');
+const demoGoalButton = document.querySelector('[data-action="demo-goal"]');
 
 const loadData = async () => {
   const response = await fetch(chrome.runtime.getURL("src/shared/sample-match.json"));
@@ -48,18 +50,18 @@ const render = (data) => {
 const sendRuntimeMessage = (message) =>
   new Promise((resolve) => chrome.runtime.sendMessage(message, resolve));
 
-const notifyActiveTab = async (overlayEnabled) => {
+const sendActiveTabMessage = async (message) => {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
   if (!tab?.id) {
     return;
   }
 
-  chrome.tabs.sendMessage(
-    tab.id,
-    { type: "matchday:overlayVisibilityChanged", overlayEnabled },
-    () => chrome.runtime.lastError
-  );
+  chrome.tabs.sendMessage(tab.id, message, () => chrome.runtime.lastError);
+};
+
+const notifyActiveTab = async (overlayEnabled) => {
+  await sendActiveTabMessage({ type: "matchday:overlayVisibilityChanged", overlayEnabled });
 };
 
 const renderState = (state = DEFAULT_STATE) => {
@@ -80,6 +82,17 @@ const setOverlayEnabled = async (overlayEnabled) => {
 
 showButton.addEventListener("click", () => setOverlayEnabled(true));
 hideButton.addEventListener("click", () => setOverlayEnabled(false));
+demoGoalButton.addEventListener("click", async () => {
+  const data = await loadData();
+  const alert = buildDemoGoalAlert(data.match, { scoringTeamId: data.match.home.id });
+  await sendActiveTabMessage({
+    type: "matchday:goalAlert",
+    alert: {
+      ...alert,
+      mascot: data.mascot
+    }
+  });
+});
 
 Promise.all([
   loadData().then(render),

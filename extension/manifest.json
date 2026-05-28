@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "description": "Prode-style pre-match betting drops, friends leaderboard context, and a future lane for Polymarket trading.",
   "permissions": ["activeTab", "alarms", "storage"],
+  "host_permissions": ["https://site.api.espn.com/*", "https://gamma-api.polymarket.com/*"],
   "background": {
     "service_worker": "src/background/service-worker.js",
     "type": "module"
@@ -32,6 +33,8 @@
         "src/shared/sample-match.json",
         "src/assets/flags/argentina.svg",
         "src/assets/flags/brazil.svg",
+        "src/assets/flags/ireland.svg",
+        "src/assets/flags/qatar.svg",
         "src/assets/mascot/picanthe-kickups.svg",
         "src/assets/chili/picanthe-idle-kickups-sheet.png",
         "src/config/supabase.js",

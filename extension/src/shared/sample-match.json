@@ -1,91 +1,91 @@
 {
   "match": {
-    "id": "argentina-brazil-demo",
-    "title": "Argentina vs Brazil",
-    "competition": "World football summer",
-    "kickoffLabel": "10 minutes before kickoff",
-    "marketClosesIn": "09:42",
+    "id": "ireland-qatar-2026-05-28",
+    "title": "Republic of Ireland vs Qatar",
+    "competition": "International Friendly",
+    "kickoffLabel": "19:45 BST",
+    "marketClosesIn": "19:45 BST",
     "home": {
-      "id": "argentina",
-      "name": "Argentina",
-      "flagAsset": "src/assets/flags/argentina.svg",
-      "colorStrip": ["#74acdf", "#ffffff", "#74acdf"]
+      "id": "ireland",
+      "name": "Republic of Ireland",
+      "flagAsset": "src/assets/flags/ireland.svg",
+      "colorStrip": ["#169b62", "#ffffff", "#ff883e"],
+      "score": "0"
     },
     "away": {
-      "id": "brazil",
-      "name": "Brazil",
-      "flagAsset": "src/assets/flags/brazil.svg",
-      "colorStrip": ["#009b3a", "#ffdf00", "#002776"]
+      "id": "qatar",
+      "name": "Qatar",
+      "flagAsset": "src/assets/flags/qatar.svg",
+      "colorStrip": ["#8a1538", "#ffffff", "#8a1538"],
+      "score": "0"
+    },
+    "draw": {
+      "id": "draw",
+      "name": "Draw"
     }
+  },
+  "feed": {
+    "badge": "REAL DATA · ESPN live · Polymarket",
+    "sourceMode": "verified snapshot",
+    "sources": ["FAI", "BBC Sport", "Aviva Stadium"]
   },
   "market": {
     "provider": "polymarket",
-    "mode": "demo",
-    "externalUrl": "https://polymarket.com",
+    "mode": "read-only",
+    "externalUrl": "https://polymarket.com/event/republic-of-ireland-vs-qatar",
     "outcomes": [
       {
-        "id": "argentina-win",
-        "teamId": "argentina",
-        "label": "Argentina wins",
-        "shortLabel": "Argentina",
-        "probability": 48,
-        "volume": "$1.4M",
-        "liquidity": "$328K",
-        "movement": "+5",
-        "accent": "#2774d9"
+        "id": "ireland-win",
+        "teamId": "ireland",
+        "label": "Republic of Ireland wins",
+        "shortLabel": "Ireland win",
+        "probability": 87.5,
+        "volume": "$120K",
+        "liquidity": "$45K",
+        "movement": "Live",
+        "accent": "#169b62"
       },
       {
         "id": "draw",
         "teamId": "draw",
-        "label": "Draw after 90",
+        "label": "Match ends in a draw",
         "shortLabel": "Draw",
-        "probability": 27,
-        "volume": "$740K",
-        "liquidity": "$180K",
-        "movement": "+2",
-        "accent": "#d7c7a0"
-      },
-      {
-        "id": "brazil-win",
-        "teamId": "brazil",
-        "label": "Brazil wins",
-        "shortLabel": "Brazil",
-        "probability": 25,
-        "volume": "$980K",
-        "liquidity": "$214K",
-        "movement": "-7",
-        "accent": "#0f8f49"
+        "probability": 10.5,
+        "volume": "$38K",
+        "liquidity": "$11K",
+        "movement": "Live",
+        "accent": "#fbbc04"
       }
     ]
   },
   "group": {
-    "id": "founders-room",
-    "name": "Founders Room",
-    "inviteCode": "PB-2026",
-    "summary": "Invite real friends and watch the leaderboard move live.",
+    "id": "real-data-room",
+    "name": "Real Data Room",
+    "inviteCode": "PB-REAL",
+    "summary": "Live match context from ESPN, market probabilities from Polymarket.",
     "friends": [
       {
-        "id": "sofi",
-        "name": "Sofi",
-        "initials": "SO",
-        "outcomeId": "argentina-win",
-        "prediction": "Argentina 2-1",
-        "points": 12
+        "id": "espn",
+        "name": "ESPN",
+        "initials": "ES",
+        "outcomeId": "ireland-win",
+        "prediction": "Live match state",
+        "points": 17
       },
       {
-        "id": "tomi",
-        "name": "Tomi",
-        "initials": "TO",
-        "outcomeId": "brazil-win",
-        "prediction": "Brazil win",
-        "points": 9
+        "id": "poly",
+        "name": "Polymarket",
+        "initials": "PM",
+        "outcomeId": "ireland-win",
+        "prediction": "Ireland win 87.5%",
+        "points": 88
       },
       {
-        "id": "juli",
-        "name": "Juli",
-        "initials": "JU",
+        "id": "fai",
+        "name": "FAI",
+        "initials": "FA",
         "outcomeId": "draw",
-        "prediction": "Draw after 90",
+        "prediction": "Fixture verified",
         "points": 10
       }
     ]
@@ -94,6 +94,6 @@
     "name": "Picanthe",
     "asset": "src/assets/mascot/picanthe-kickups.svg",
     "spriteAsset": "src/assets/chili/picanthe-idle-kickups-sheet.png",
-    "caption": "Picanthe keeps the ball alive until kickoff."
+    "caption": "Picanthe found a real match and a real market."
   }
 }

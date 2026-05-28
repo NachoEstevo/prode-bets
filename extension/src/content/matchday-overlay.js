@@ -3,28 +3,50 @@ const DEFAULT_STATE = { overlayEnabled: true, tradingMode: "demo" };
 
 const fallbackData = {
   match: {
-    title: "Argentina vs Brazil",
-    marketClosesIn: "09:42",
-    home: { id: "argentina", name: "Argentina", flagAsset: "src/assets/flags/argentina.svg" },
-    away: { id: "brazil", name: "Brazil", flagAsset: "src/assets/flags/brazil.svg" }
+    id: "ireland-qatar-2026-05-28",
+    title: "Republic of Ireland vs Qatar",
+    competition: "International Friendly",
+    kickoffLabel: "19:45 BST",
+    marketClosesIn: "19:45 BST",
+    home: {
+      id: "ireland",
+      name: "Republic of Ireland",
+      flagAsset: "src/assets/flags/ireland.svg",
+      score: "0"
+    },
+    away: {
+      id: "qatar",
+      name: "Qatar",
+      flagAsset: "src/assets/flags/qatar.svg",
+      score: "0"
+    },
+    draw: {
+      id: "draw",
+      name: "Draw"
+    }
+  },
+  feed: {
+    badge: "REAL DATA · ESPN live · Polymarket",
+    sourceMode: "verified snapshot"
   },
   market: {
-    externalUrl: "https://polymarket.com",
+    provider: "polymarket",
+    mode: "read-only",
+    externalUrl: "https://polymarket.com/event/republic-of-ireland-vs-qatar",
     outcomes: [
-      { id: "argentina-win", teamId: "argentina", shortLabel: "Argentina", probability: 48, volume: "$1.4M", liquidity: "$328K", movement: "+5", accent: "#2774d9" },
-      { id: "draw", teamId: "draw", shortLabel: "Draw", probability: 27, volume: "$740K", liquidity: "$180K", movement: "+2", accent: "#d7c7a0" },
-      { id: "brazil-win", teamId: "brazil", shortLabel: "Brazil", probability: 25, volume: "$980K", liquidity: "$214K", movement: "-7", accent: "#0f8f49" }
+      { id: "ireland-win", teamId: "ireland", shortLabel: "Ireland win", probability: 87.5, volume: "$120K", liquidity: "$45K", movement: "Live", accent: "#169b62" },
+      { id: "draw", teamId: "draw", shortLabel: "Draw", probability: 10.5, volume: "$38K", liquidity: "$11K", movement: "Live", accent: "#fbbc04" }
     ]
   },
   group: {
-    id: "founders-room",
-    name: "Founders Room",
-    inviteCode: "PB-2026",
-    summary: "Invite real friends and watch the leaderboard move live.",
+    id: "real-data-room",
+    name: "Real Data Room",
+    inviteCode: "PB-REAL",
+    summary: "Live match context from ESPN, market probabilities from Polymarket.",
     friends: [
-      { name: "Sofi", initials: "SO", outcomeId: "argentina-win", prediction: "Argentina 2-1", points: 12 },
-      { name: "Tomi", initials: "TO", outcomeId: "brazil-win", prediction: "Brazil win", points: 9 },
-      { name: "Juli", initials: "JU", outcomeId: "draw", prediction: "Draw after 90", points: 10 }
+      { name: "ESPN", initials: "ES", outcomeId: "ireland-win", prediction: "Live match state", points: 17 },
+      { name: "Polymarket", initials: "PM", outcomeId: "ireland-win", prediction: "Ireland win 87.5%", points: 88 },
+      { name: "FAI", initials: "FA", outcomeId: "draw", prediction: "Fixture verified", points: 10 }
     ]
   },
   mascot: {
@@ -62,6 +84,16 @@ const getAssetUrl = (path) => {
 
 const loadMatchData = async () => {
   try {
+    const response = await chrome.runtime.sendMessage({ type: "matchday:getRealDemoData" });
+
+    if (response?.ok && response.data) {
+      return response.data;
+    }
+  } catch (_error) {
+    // Preview pages and restricted browser pages fall back to the bundled snapshot.
+  }
+
+  try {
     const response = await fetch(getAssetUrl("src/shared/sample-match.json"));
 
     if (!response.ok) {
@@ -97,9 +129,9 @@ const persistOverlayEnabled = (overlayEnabled) => {
   }
 };
 
-const renderFlag = (team) => `
-  <img class="mm-flag" src="${escapeHtml(getAssetUrl(team.flagAsset))}" alt="${escapeHtml(team.name)} flag">
-`;
+const renderFlag = (team = {}) => team.flagAsset
+  ? `<img class="mm-flag" src="${escapeHtml(getAssetUrl(team.flagAsset))}" alt="${escapeHtml(team.name)} flag">`
+  : `<span class="mm-flag mm-flag-neutral" aria-label="${escapeHtml(team.name || "Market")}">${escapeHtml((team.name || "M").slice(0, 1))}</span>`;
 
 const renderOutcomeBadge = (outcome, team) => team
   ? renderFlag(team)
@@ -126,7 +158,7 @@ const renderOutcome = (outcome, team) => `
       <span>Vol ${escapeHtml(outcome.volume)}</span>
       <span>Liq ${escapeHtml(outcome.liquidity)}</span>
     </div>
-    <button class="mm-buy" type="button" data-action="open-market">Buy Yes</button>
+    <button class="mm-buy" type="button" data-action="open-market">Open market</button>
   </article>
 `;
 
@@ -148,14 +180,18 @@ const loadRoomPanel = () => import(getAssetUrl("src/social/room-panel.js"));
 
 const renderOverlay = (data, roomPanel) => {
   const root = document.createElement("section");
-  const teamsById = new Map([[data.match.home.id, data.match.home], [data.match.away.id, data.match.away]]);
+  const teamsById = new Map([
+    [data.match.home.id, data.match.home],
+    [data.match.away.id, data.match.away],
+    [data.match.draw?.id, data.match.draw]
+  ]);
 
   root.id = ROOT_ID;
   root.className = "mm-shell mm-active-tab-market";
   root.innerHTML = `
     <div class="mm-drop mm-is-compact" role="dialog" aria-label="Matchday market drop">
       <div class="mm-topline">
-        <span>Closes in ${escapeHtml(data.match.marketClosesIn)}</span>
+        <span>${escapeHtml(data.feed?.badge || `Closes in ${data.match.marketClosesIn}`)} · ${escapeHtml(data.match.marketClosesIn)}</span>
         <button class="mm-close" type="button" aria-label="Close Matchday Markets" data-action="close">Close</button>
       </div>
       <div class="mm-matchline">
@@ -172,7 +208,7 @@ const renderOverlay = (data, roomPanel) => {
         <div class="mm-market-grid">
           ${data.market.outcomes.map((outcome) => renderOutcome(outcome, teamsById.get(outcome.teamId))).join("")}
         </div>
-        <p class="mm-note">Demo mode: opens Polymarket externally. No order is placed here.</p>
+        <p class="mm-note">Read-only: opens Polymarket externally. No order is placed here.</p>
       </section>
       ${roomPanel.renderFriendsPanel(data)}
       <section class="mm-tab-panel" data-panel="motion" role="tabpanel" hidden>

@@ -5,6 +5,6 @@
   "description": "Chrome extension prototype for prode-style betting drops, friends predictions, and future Polymarket integration.",
   "type": "module",
   "scripts": {
-    "test": "node --test tests/*.test.js"
+    "test": "node --test"
   }
 }

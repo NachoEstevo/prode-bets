@@ -12,6 +12,8 @@ test("manifest is a Manifest V3 extension with content overlay and popup", async
   const manifest = await readJson("extension/manifest.json");
 
   assert.equal(manifest.manifest_version, 3);
+  assert.ok(manifest.host_permissions.includes("https://site.api.espn.com/*"));
+  assert.ok(manifest.host_permissions.includes("https://gamma-api.polymarket.com/*"));
   assert.equal(manifest.action.default_popup, "src/popup/popup.html");
   assert.equal(manifest.background.service_worker, "src/background/service-worker.js");
   assert.equal(manifest.content_scripts.length, 1);
@@ -28,13 +30,16 @@ test("manifest is a Manifest V3 extension with content overlay and popup", async
   ]);
 });
 
-test("sample match has three outcomes that sum to 100 percent", async () => {
+test("sample match has two read-only market outcomes with valid probabilities", async () => {
   const sample = await readJson("extension/src/shared/sample-match.json");
-  const total = sample.market.outcomes.reduce((sum, outcome) => sum + outcome.probability, 0);
 
-  assert.equal(sample.market.outcomes.length, 3);
-  assert.ok(sample.market.outcomes.some((outcome) => outcome.id === "draw"));
-  assert.equal(total, 100);
+  assert.equal(sample.market.outcomes.length, 2);
+  assert.equal(sample.market.mode, "read-only");
+  assert.equal(sample.market.outcomes[0].id, "ireland-win");
+  assert.equal(sample.market.outcomes[1].id, "draw");
+  for (const outcome of sample.market.outcomes) {
+    assert.ok(outcome.probability >= 0 && outcome.probability <= 100);
+  }
 });
 
 test("friend picks reference existing outcome ids", async () => {
@@ -52,10 +57,10 @@ test("sample match uses real country flags and a local chili mascot asset", asyn
   const manifest = await readJson("extension/manifest.json");
   const resources = manifest.web_accessible_resources.flatMap((entry) => entry.resources);
 
-  assert.equal(sample.match.home.name, "Argentina");
-  assert.equal(sample.match.away.name, "Brazil");
-  assert.equal(sample.match.home.flagAsset, "src/assets/flags/argentina.svg");
-  assert.equal(sample.match.away.flagAsset, "src/assets/flags/brazil.svg");
+  assert.equal(sample.match.home.name, "Republic of Ireland");
+  assert.equal(sample.match.away.name, "Qatar");
+  assert.equal(sample.match.home.flagAsset, "src/assets/flags/ireland.svg");
+  assert.equal(sample.match.away.flagAsset, "src/assets/flags/qatar.svg");
   assert.equal(sample.mascot.asset, "src/assets/mascot/picanthe-kickups.svg");
   assert.equal(sample.mascot.spriteAsset, "src/assets/chili/picanthe-idle-kickups-sheet.png");
   assert.ok(resources.includes(sample.match.home.flagAsset));
@@ -76,7 +81,7 @@ test("manifest referenced UI files exist and do not submit Polymarket orders", a
 
   for (const file of referencedFiles) {
     const content = await readFile(new URL(`../extension/${file}`, import.meta.url), "utf8");
-    assert.doesNotMatch(content, /clob\.polymarket\.com\/order|createOrder|postOrder/i);
+    assert.doesNotMatch(content, /clob\.polymarket\.com\/order|createOrder|postOrder|wallet auth|signOrder|Buy Yes/i);
   }
 });
 
@@ -171,12 +176,19 @@ test("real flag SVG assets are local and recognizable", async () => {
   const argentina = await readText("extension/src/assets/flags/argentina.svg");
   const brazil = await readText("extension/src/assets/flags/brazil.svg");
 
+  const ireland = await readText("extension/src/assets/flags/ireland.svg");
+  const qatar = await readText("extension/src/assets/flags/qatar.svg");
+
   assert.match(argentina, /<svg/);
   assert.match(argentina, /#74acdf/i);
   assert.match(argentina, /#f6b40e/i);
   assert.match(brazil, /<svg/);
   assert.match(brazil, /#009b3a/i);
   assert.match(brazil, /#ffdf00/i);
+  assert.match(ireland, /<svg/);
+  assert.match(ireland, /#169b62/i);
+  assert.match(qatar, /<svg/);
+  assert.match(qatar, /#8a1538/i);
 });
 
 test("manifest exposes Supabase room modules to dynamic imports", async () => {

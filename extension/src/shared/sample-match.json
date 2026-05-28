@@ -81,6 +81,7 @@
   "mascot": {
     "name": "Picanthe",
     "asset": "src/assets/mascot/picanthe-kickups.svg",
+    "spriteAsset": "src/assets/chili/picanthe-idle-kickups-sheet.png",
     "caption": "Picanthe keeps the ball alive until kickoff."
   }
 }

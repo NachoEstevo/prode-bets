@@ -27,6 +27,7 @@ const fallbackData = {
   mascot: {
     name: "Picanthe",
     asset: "src/assets/mascot/picanthe-kickups.svg",
+    spriteAsset: "src/assets/chili/picanthe-idle-kickups-sheet.png",
     caption: "Picanthe keeps the ball alive until kickoff."
   }
 };
@@ -41,6 +42,14 @@ const escapeHtml = (value) =>
   })[char]);
 
 const getAssetUrl = (path) => {
+  try {
+    if (typeof globalThis.__PRODE_PREVIEW_GET_URL__ === "function") {
+      return globalThis.__PRODE_PREVIEW_GET_URL__(path);
+    }
+  } catch (_error) {
+    // Fall through to the extension runtime resolver.
+  }
+
   try {
     return chrome.runtime.getURL(path);
   } catch (_error) {
@@ -87,6 +96,16 @@ const persistOverlayEnabled = (overlayEnabled) => {
 
 const renderFlag = (team) => `
   <img class="mm-flag" src="${escapeHtml(getAssetUrl(team.flagAsset))}" alt="${escapeHtml(team.name)} flag">
+`;
+
+const renderMascotSprite = (mascot, className = "") => `
+  <span
+    class="mm-chili-sprite ${escapeHtml(className)}"
+    role="img"
+    aria-label="${escapeHtml(mascot.name)} doing kickups"
+  >
+    <img src="${escapeHtml(getAssetUrl(mascot.spriteAsset))}" alt="" aria-hidden="true">
+  </span>
 `;
 
 const renderOutcome = (outcome, team) => `
@@ -173,16 +192,14 @@ const renderOverlay = (data) => {
       </section>
       <section class="mm-tab-panel" data-panel="motion" role="tabpanel" hidden>
         <div class="mm-mascot-card">
-          <img class="mm-mascot-img" src="${escapeHtml(getAssetUrl(data.mascot.asset))}" alt="${escapeHtml(data.mascot.name)} doing kickups">
-          <span class="mm-ball" aria-hidden="true"></span>
+          ${renderMascotSprite(data.mascot, "mm-chili-sprite-large")}
           <p>${escapeHtml(data.mascot.caption)}</p>
         </div>
       </section>
     </div>
 
     <div class="mm-mascot" aria-hidden="true">
-      <img class="mm-mascot-img" src="${escapeHtml(getAssetUrl(data.mascot.asset))}" alt="">
-      <span class="mm-ball"></span>
+      ${renderMascotSprite(data.mascot)}
     </div>
     <div class="mm-field" aria-hidden="true"></div>
   `;

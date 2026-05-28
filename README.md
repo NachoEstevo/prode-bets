@@ -11,7 +11,7 @@ This repo starts with a no-build Manifest V3 extension. It demonstrates the brow
 - friends group leaderboard
 - neo-pixel matchday overlay
 - X/Twitter keyword detector that injects a compact match market card into relevant tweets
-- real country flag assets and a Picanthe chili mascot animation
+- real country flag assets and a Picanthe chili sprite animation
 - shared sample match data
 - Polymarket integration notes for the next engineer
 

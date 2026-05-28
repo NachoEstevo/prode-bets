@@ -55,9 +55,11 @@ test("sample match uses real country flags and a local chili mascot asset", asyn
   assert.equal(sample.match.home.flagAsset, "src/assets/flags/argentina.svg");
   assert.equal(sample.match.away.flagAsset, "src/assets/flags/brazil.svg");
   assert.equal(sample.mascot.asset, "src/assets/mascot/picanthe-kickups.svg");
+  assert.equal(sample.mascot.spriteAsset, "src/assets/chili/picanthe-idle-kickups-sheet.png");
   assert.ok(resources.includes(sample.match.home.flagAsset));
   assert.ok(resources.includes(sample.match.away.flagAsset));
   assert.ok(resources.includes(sample.mascot.asset));
+  assert.ok(resources.includes(sample.mascot.spriteAsset));
 });
 
 test("manifest referenced UI files exist and do not submit Polymarket orders", async () => {
@@ -113,7 +115,9 @@ test("local preview page shims Chrome APIs and loads extension overlay assets", 
   assert.match(previewHtml, /ESPN-style mock/);
   assert.match(previewHtml, /data-testid="tweet"/);
   assert.match(previewShim, /globalThis\.chrome/);
+  assert.match(previewShim, /__PRODE_PREVIEW_GET_URL__/);
   assert.match(previewShim, /src\/shared\/sample-match\.json/);
+  assert.match(previewShim, /new URL/);
   assert.match(previewCss, /grid-auto-flow:\s*dense/);
 });
 
@@ -142,8 +146,11 @@ test("overlay separates dense content into tabs and renders the mascot", async (
   assert.match(overlayJs, /data-tab="friends"/);
   assert.match(overlayJs, /data-tab="motion"/);
   assert.match(overlayJs, /mm-mascot/);
+  assert.match(overlayJs, /mm-chili-sprite/);
   assert.match(overlayJs, /flagAsset/);
   assert.match(refinedCss, /mm-tab-panel/);
+  assert.match(refinedCss, /steps\(7\)/);
+  assert.match(refinedCss, /translate3d\(-87\.5%/);
   assert.match(refinedCss, /mm-is-compact/);
   assert.match(mascot, /picanthe/i);
   assert.match(mascot, /#c9192e/i);

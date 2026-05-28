@@ -31,7 +31,8 @@
         "src/shared/sample-match.json",
         "src/assets/flags/argentina.svg",
         "src/assets/flags/brazil.svg",
-        "src/assets/mascot/picanthe-kickups.svg"
+        "src/assets/mascot/picanthe-kickups.svg",
+        "src/assets/chili/picanthe-idle-kickups-sheet.png"
       ],
       "matches": ["http://*/*", "https://*/*"]
     }

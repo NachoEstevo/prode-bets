@@ -203,7 +203,7 @@
 #matchday-markets-root .mm-mascot-card {
   position: relative;
   display: grid;
-  min-height: 178px;
+  min-height: 282px;
   place-items: center;
   overflow: hidden;
   border: 1px solid rgba(255, 248, 238, 0.1);
@@ -213,51 +213,42 @@
 
 #matchday-markets-root .mm-mascot-card p {
   max-width: 240px;
-  margin: 0 0 12px;
+  margin: -18px 0 12px;
   text-align: center;
 }
 
 #matchday-markets-root .mm-mascot {
   position: fixed;
-  right: 26px;
-  bottom: 30px;
-  width: 112px;
-  height: 112px;
+  right: 22px;
+  bottom: 22px;
+  width: 98px;
+  height: 260px;
   pointer-events: none;
   filter: drop-shadow(0 18px 24px rgba(0, 0, 0, 0.22));
   animation: mm-mascot-idle 1300ms ease-in-out infinite alternate;
 }
 
-#matchday-markets-root .mm-mascot-img {
+#matchday-markets-root .mm-chili-sprite {
   display: block;
-  width: 124px;
-  height: 124px;
-  object-fit: contain;
+  overflow: hidden;
+  width: 98px;
+  height: 260px;
 }
 
-#matchday-markets-root .mm-mascot-card .mm-mascot-img {
-  width: 150px;
-  height: 150px;
+#matchday-markets-root .mm-chili-sprite-large {
+  display: block;
+  width: 128px;
+  height: 339px;
 }
 
-#matchday-markets-root .mm-ball {
-  position: absolute;
-  right: 12px;
-  top: 8px;
-  width: 20px;
-  height: 20px;
-  border: 3px solid #151515;
-  border-radius: 50%;
-  background:
-    linear-gradient(90deg, transparent 45%, #151515 45% 55%, transparent 55%),
-    linear-gradient(0deg, transparent 45%, #151515 45% 55%, transparent 55%),
-    #fff8ee;
-  animation: mm-ball-pop 760ms cubic-bezier(0.16, 1, 0.3, 1) infinite alternate;
-}
-
-#matchday-markets-root .mm-mascot-card .mm-ball {
-  right: 112px;
-  top: 28px;
+#matchday-markets-root .mm-chili-sprite img {
+  display: block;
+  width: 800%;
+  height: 100%;
+  max-width: none;
+  animation: mm-chili-kickups 920ms steps(7) infinite;
+  image-rendering: auto;
+  transform: translate3d(0, 0, 0);
 }
 
 #matchday-markets-root .mm-field {
@@ -279,8 +270,9 @@
   from { transform: translateY(0) rotate(-2deg); } to { transform: translateY(-8px) rotate(2deg); }
 }
 
-@keyframes mm-ball-pop {
-  from { transform: translateY(16px) rotate(0deg); } to { transform: translateY(-10px) rotate(60deg); }
+@keyframes mm-chili-kickups {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-87.5%, 0, 0); }
 }
 
 @media (max-width: 720px) {

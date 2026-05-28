@@ -20,12 +20,21 @@
       <p>Loading match...</p>
     </section>
 
+    <section class="card controls">
+      <h2>Overlay controls</h2>
+      <p id="state-label" class="muted">Checking overlay state...</p>
+      <div class="control-row">
+        <button type="button" data-action="show-overlay">Show overlay</button>
+        <button type="button" data-action="hide-overlay">Hide overlay</button>
+      </div>
+    </section>
+
     <section class="card">
       <h2>Polymarket lane</h2>
       <p class="muted">Demo mode opens markets externally. Wallet auth, eligibility, and order preview belong in the next integration pass.</p>
       <a id="market-link" href="https://polymarket.com" target="_blank" rel="noreferrer">Open Polymarket</a>
     </section>
   </main>
-  <script src="./popup.js"></script>
+  <script type="module" src="./popup.js"></script>
 </body>
 </html>

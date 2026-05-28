@@ -3,7 +3,7 @@
   "name": "Prode Bets",
   "version": "0.1.0",
   "description": "Prode-style pre-match betting drops, friends leaderboard context, and a future lane for Polymarket trading.",
-  "permissions": ["alarms", "storage"],
+  "permissions": ["activeTab", "alarms", "storage"],
   "background": {
     "service_worker": "src/background/service-worker.js",
     "type": "module"

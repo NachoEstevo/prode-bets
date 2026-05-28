@@ -1,5 +1,10 @@
+import { DEFAULT_STATE } from "../shared/matchday-state.js";
+
 const card = document.querySelector("#match-card");
 const marketLink = document.querySelector("#market-link");
+const stateLabel = document.querySelector("#state-label");
+const showButton = document.querySelector('[data-action="show-overlay"]');
+const hideButton = document.querySelector('[data-action="hide-overlay"]');
 
 const loadData = async () => {
   const response = await fetch(chrome.runtime.getURL("src/shared/sample-match.json"));
@@ -33,8 +38,46 @@ const render = (data) => {
   `;
 };
 
-loadData()
-  .then(render)
-  .catch((error) => {
-    card.innerHTML = `<p>${error.message}</p>`;
+const sendRuntimeMessage = (message) =>
+  new Promise((resolve) => chrome.runtime.sendMessage(message, resolve));
+
+const notifyActiveTab = async (overlayEnabled) => {
+  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+
+  if (!tab?.id) {
+    return;
+  }
+
+  chrome.tabs.sendMessage(
+    tab.id,
+    { type: "matchday:overlayVisibilityChanged", overlayEnabled },
+    () => chrome.runtime.lastError
+  );
+};
+
+const renderState = (state = DEFAULT_STATE) => {
+  stateLabel.textContent = state.overlayEnabled
+    ? "Overlay is enabled for the active tab."
+    : "Overlay is hidden until you show it again.";
+};
+
+const setOverlayEnabled = async (overlayEnabled) => {
+  const response = await sendRuntimeMessage({
+    type: "matchday:setState",
+    patch: { overlayEnabled }
   });
+
+  renderState(response?.state || { ...DEFAULT_STATE, overlayEnabled });
+  await notifyActiveTab(overlayEnabled);
+};
+
+showButton.addEventListener("click", () => setOverlayEnabled(true));
+hideButton.addEventListener("click", () => setOverlayEnabled(false));
+
+Promise.all([
+  loadData().then(render),
+  sendRuntimeMessage({ type: "matchday:getState" }).then((response) => renderState(response?.state))
+]).catch((error) => {
+  card.innerHTML = `<p>${error.message}</p>`;
+  renderState(DEFAULT_STATE);
+});

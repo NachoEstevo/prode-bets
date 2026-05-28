@@ -1,8 +1,4 @@
-const DEFAULT_STATE = {
-  overlayEnabled: true,
-  tradingMode: "demo",
-  lastUpdatedAt: new Date().toISOString()
-};
+import { DEFAULT_STATE, reduceStatePatch } from "../shared/matchday-state.js";
 
 chrome.runtime.onInstalled.addListener(async () => {
   const current = await chrome.storage.local.get(DEFAULT_STATE);
@@ -10,13 +6,23 @@ chrome.runtime.onInstalled.addListener(async () => {
 });
 
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
-  if (message?.type !== "matchday:getState") {
-    return false;
+  if (message?.type === "matchday:getState") {
+    chrome.storage.local.get(DEFAULT_STATE).then((state) => {
+      sendResponse({ ok: true, state: reduceStatePatch(DEFAULT_STATE, state) });
+    });
+
+    return true;
   }
 
-  chrome.storage.local.get(DEFAULT_STATE).then((state) => {
-    sendResponse({ ok: true, state });
-  });
+  if (message?.type === "matchday:setState") {
+    chrome.storage.local.get(DEFAULT_STATE).then(async (state) => {
+      const nextState = reduceStatePatch(state, message.patch);
+      await chrome.storage.local.set(nextState);
+      sendResponse({ ok: true, state: nextState });
+    });
 
-  return true;
+    return true;
+  }
+
+  return false;
 });

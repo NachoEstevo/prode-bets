@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prode Bets Preview</title>
+  <link rel="stylesheet" href="../extension/src/content/matchday-overlay.css">
+  <link rel="stylesheet" href="../extension/src/content/matchday-player.css">
+  <style>
+    body {
+      min-height: 140vh;
+      margin: 0;
+      background:
+        radial-gradient(circle at 20% 10%, rgba(47, 107, 255, 0.22), transparent 22rem),
+        radial-gradient(circle at 80% 18%, rgba(227, 23, 145, 0.2), transparent 24rem),
+        #07090d;
+      color: #f8f4ed;
+      font-family: ui-sans-serif, system-ui, sans-serif;
+    }
+
+    main {
+      max-width: 960px;
+      padding: 180px 32px;
+    }
+
+    h1 {
+      max-width: 760px;
+      margin: 0;
+      font-size: clamp(3rem, 8vw, 7rem);
+      line-height: 0.88;
+    }
+
+    p {
+      max-width: 560px;
+      color: rgba(248, 244, 237, 0.68);
+      font-size: 1.2rem;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Preview page for fast overlay iteration.</h1>
+    <p>This page shims the Chrome extension APIs so the content overlay can be reviewed without loading the unpacked extension.</p>
+  </main>
+  <script src="./preview-shim.js"></script>
+  <script src="../extension/src/content/matchday-overlay.js"></script>
+</body>
+</html>

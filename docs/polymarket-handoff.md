@@ -47,6 +47,8 @@ extension/src/polymarket/
 
 `matchday-overlay.js` should receive normalized match data. It should not know how to sign orders or call CLOB endpoints.
 
+The first pure seam now exists at `extension/src/polymarket/normalize-market.js`. Feed it a two-outcome market-like object and it returns the internal `market` shape used by `sample-match.json`. Keep network fetching and order submission outside that file.
+
 ## Backend Option
 
 Use Supabase or Neon only when groups become real:

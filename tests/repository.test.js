@@ -60,3 +60,29 @@ test("project metadata uses the public Prode Bets name", async () => {
   assert.equal(packageJson.name, "prode-bets");
   assert.equal(manifest.name, "Prode Bets");
 });
+
+test("popup exposes overlay controls and content script listens for visibility messages", async () => {
+  const popupHtml = await readFile(new URL("../extension/src/popup/popup.html", import.meta.url), "utf8");
+  const popupJs = await readFile(new URL("../extension/src/popup/popup.js", import.meta.url), "utf8");
+  const contentJs = await readFile(new URL("../extension/src/content/matchday-overlay.js", import.meta.url), "utf8");
+
+  assert.match(popupHtml, /data-action="show-overlay"/);
+  assert.match(popupHtml, /data-action="hide-overlay"/);
+  assert.match(popupJs, /matchday:setState/);
+  assert.match(popupJs, /matchday:overlayVisibilityChanged/);
+  assert.match(contentJs, /chrome\.runtime\.onMessage\.addListener/);
+  assert.match(contentJs, /matchday:setState/);
+  assert.match(contentJs, /matchday:overlayVisibilityChanged/);
+});
+
+test("local preview page shims Chrome APIs and loads extension overlay assets", async () => {
+  const previewHtml = await readFile(new URL("../preview/index.html", import.meta.url), "utf8");
+  const previewShim = await readFile(new URL("../preview/preview-shim.js", import.meta.url), "utf8");
+
+  assert.match(previewHtml, /matchday-overlay\.css/);
+  assert.match(previewHtml, /matchday-player\.css/);
+  assert.match(previewHtml, /preview-shim\.js/);
+  assert.match(previewHtml, /matchday-overlay\.js/);
+  assert.match(previewShim, /globalThis\.chrome/);
+  assert.match(previewShim, /src\/shared\/sample-match\.json/);
+});

@@ -25,6 +25,10 @@ The friends layer is social only: picks, points, leaderboard, and reactions. It 
 npm test
 ```
 
+## Fast Visual Preview
+
+Open `preview/index.html` in a browser to review the overlay without installing the unpacked extension. This uses a small local Chrome API shim and the same content script/CSS as the real extension.
+
 ## Load The Extension
 
 1. Open `chrome://extensions`.
@@ -39,6 +43,7 @@ npm test
 - `extension/src/content/`: injected page overlay and neo-pixel player styling.
 - `extension/src/popup/`: extension popup.
 - `extension/src/shared/sample-match.json`: single demo data source.
+- `preview/index.html`: local overlay preview for quick visual iteration.
 - `docs/polymarket-handoff.md`: integration notes for the Polymarket lane.
 - `docs/superpowers/specs/`: product/design spec.
 - `docs/superpowers/plans/`: implementation plan.

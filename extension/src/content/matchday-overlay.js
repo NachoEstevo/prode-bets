@@ -1,4 +1,5 @@
 const ROOT_ID = "matchday-markets-root";
+const DEFAULT_STATE = { overlayEnabled: true, tradingMode: "demo" };
 
 const fallbackData = {
   match: {
@@ -45,6 +46,29 @@ const loadMatchData = async () => {
     return response.json();
   } catch (_error) {
     return fallbackData;
+  }
+};
+
+const loadExtensionState = async () => {
+  try {
+    return await new Promise((resolve) => {
+      chrome.runtime.sendMessage({ type: "matchday:getState" }, (response) => {
+        resolve(response?.state || DEFAULT_STATE);
+      });
+    });
+  } catch (_error) {
+    return DEFAULT_STATE;
+  }
+};
+
+const persistOverlayEnabled = (overlayEnabled) => {
+  try {
+    chrome.runtime.sendMessage(
+      { type: "matchday:setState", patch: { overlayEnabled } },
+      () => chrome.runtime.lastError
+    );
+  } catch (_error) {
+    // Preview mode and restricted pages may not have a live extension runtime.
   }
 };
 
@@ -128,7 +152,10 @@ const renderOverlay = (data) => {
     <div class="mm-field" aria-hidden="true"></div>
   `;
 
-  root.querySelector('[data-action="close"]').addEventListener("click", () => root.remove());
+  root.querySelector('[data-action="close"]').addEventListener("click", () => {
+    persistOverlayEnabled(false);
+    root.remove();
+  });
   root.querySelector('[data-action="minimize"]').addEventListener("click", () => {
     root.classList.toggle("mm-is-minimized");
   });
@@ -141,14 +168,45 @@ const renderOverlay = (data) => {
   return root;
 };
 
-const init = async () => {
+let cachedData;
+
+const hideOverlay = () => {
+  document.getElementById(ROOT_ID)?.remove();
+};
+
+const showOverlay = async () => {
   if (window.top !== window.self || document.getElementById(ROOT_ID)) {
     return;
   }
 
-  const data = await loadMatchData();
-  document.documentElement.append(renderOverlay(data));
+  cachedData = cachedData || await loadMatchData();
+  document.documentElement.append(renderOverlay(cachedData));
 };
+
+const init = async () => {
+  const state = await loadExtensionState();
+
+  if (state.overlayEnabled) {
+    await showOverlay();
+  }
+};
+
+if (globalThis.chrome?.runtime?.onMessage) {
+  chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+    if (message?.type !== "matchday:overlayVisibilityChanged") {
+      return false;
+    }
+
+    if (message.overlayEnabled) {
+      showOverlay().then(() => sendResponse({ ok: true }));
+      return true;
+    }
+
+    hideOverlay();
+    sendResponse({ ok: true });
+    return false;
+  });
+}
 
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", init, { once: true });
